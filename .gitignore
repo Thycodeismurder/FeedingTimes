@@ -1,0 +1,4 @@
+service/src/service/bin/
+service/src/service/obj/
+service/test/
+FeedingTimes.sln
