@@ -42,7 +42,17 @@ public class Functions
         using var client = new AmazonDynamoDBClient(Amazon.RegionEndpoint.EUWest1);
         var response = await client.UpdateItemAsync(new UpdateItemRequest
         {
-            TableName = "FeedingTimes"
+            TableName = "FeedingTimes",
+            Key = new Dictionary<string, AttributeValue> { { "Mother", new AttributeValue { S = "Heidi" } }, { "Father", new AttributeValue { S = "Ville" } } },
+            UpdateExpression = "SET HeVi = list_append(#list, :vals)",
+            ExpressionAttributeNames = new Dictionary<string, string>() { { "#list", "HeVi" } },
+            ExpressionAttributeValues = new Dictionary<string, AttributeValue> {
+                {":vals", new AttributeValue {L = new List<AttributeValue>() {
+                    new AttributeValue {M = new Dictionary<string, AttributeValue> {{"Feeding", new AttributeValue {M = {{"quantity", new AttributeValue {N = quantity}},
+                    {"time", new AttributeValue { S= time}}}}}}}
+                }}}
+            },
+            ReturnValues = "ALL_NEW"
         });
         Document document = Document.FromAttributeMap(response.Attributes);
         return document.ToJsonPretty();
@@ -62,7 +72,7 @@ public class Functions
         {
             StatusCode = (int)HttpStatusCode.OK,
             Body = await QueryTable(),
-            Headers = new Dictionary<string, string> { { "Content-Type", "text/plain" } }
+            Headers = getHeaders()
         };
 
         return response;
@@ -73,13 +83,19 @@ public class Functions
         var pathParameters = request.PathParameters.ToList();
         var time = pathParameters[0].Value;
         var quantity = pathParameters[1].Value;
+        context.Logger.LogInformation("time:" + time + " quantity:" + quantity);
         var response = new APIGatewayProxyResponse
         {
             StatusCode = (int)HttpStatusCode.OK,
             Body = await PostFeedingAsync(time, quantity),
-            Headers = new Dictionary<string, string> { { "Content-Type", "text/plain" } }
+            Headers = getHeaders()
         };
 
         return response;
+    }
+    public Dictionary<string, string> getHeaders()
+    {
+        var headers = new Dictionary<string, string> { { "Content-Type", "*" }, { "Access-Control-Allow-Headers", "Content-Type" }, { "Access-Control-Allow-Origin", "*" }, { "Access-Control-Allow-Methods", "*" } };
+        return headers;
     }
 }

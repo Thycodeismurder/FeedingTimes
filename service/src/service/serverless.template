@@ -68,12 +68,7 @@
                 "Action": [
                   "dynamodb:Update*"
                 ],
-                "Resource": {
-                  "Fn::GetAtt": [
-                    "pollsDynamoDBTable",
-                    "Arn"
-                  ]
-                }
+                "Resource": "*"
               },
               {
                 "Effect": "Allow",
