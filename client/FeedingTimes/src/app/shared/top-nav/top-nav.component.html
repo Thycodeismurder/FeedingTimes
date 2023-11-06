@@ -1,1 +1,28 @@
-<p>top-nav works!</p>
+<div class="top-nav-bar">
+  <div class="top-nav-bar-left-content">
+    <div class="top-nav-bar-left-content-home">
+      <button
+        class="top-nav-bar-left-content-home-button"
+        color="primary"
+        mat-button
+        aria-label="home page"
+        routerLink=""
+      >
+        <img
+          class="top-nav-bar-left-content-home-button-logo"
+          [src]="logoPath"
+        />
+      </button>
+    </div>
+    <div class="top-nav-bar-left-content-calendar">
+      <button routerLink="calendar" mat-button aria-label="calendar page">
+        Calendar
+      </button>
+    </div>
+    <div class="top-nav-bar-left-content-action">
+      <button routerLink="action-form" mat-button aria-label="action-form page">
+        Report event
+      </button>
+    </div>
+  </div>
+</div>

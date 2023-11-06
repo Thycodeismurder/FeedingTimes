@@ -12,14 +12,27 @@ import { FormComponent } from './action-form-view/form/form.component';
 import { CalendarComponent } from './calendar-view/calendar/calendar.component';
 import { TopNavComponent } from './shared/top-nav/top-nav.component';
 import { BottomNavComponent } from './shared/bottom-nav/bottom-nav.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
-  declarations: [AppComponent, FrontPageComponent, CalendarViewComponent, ActionFormViewComponent, FormComponent, CalendarComponent, TopNavComponent, BottomNavComponent],
+  declarations: [
+    AppComponent,
+    FrontPageComponent,
+    CalendarViewComponent,
+    ActionFormViewComponent,
+    FormComponent,
+    CalendarComponent,
+    TopNavComponent,
+    BottomNavComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    MatButtonModule,
+    MatIconModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
