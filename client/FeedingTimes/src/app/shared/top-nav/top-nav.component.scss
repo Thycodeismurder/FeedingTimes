@@ -27,3 +27,11 @@
         .top-nav-bar-left-content-action {
             color: white;
         }
+    .top-nav-bar-right-content {
+        display: grid;
+        position: fixed;
+        right: 0;
+        text-align: end;
+        padding-right: 20px;
+        color: white;
+    }

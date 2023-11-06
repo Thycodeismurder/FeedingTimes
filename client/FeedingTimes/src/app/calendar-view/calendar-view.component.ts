@@ -13,7 +13,6 @@ export class CalendarViewComponent implements OnInit {
   ngOnInit(): void {
     this.userDataService.getAll().subscribe((data: User[]) => {
       this.user = data[0];
-      console.log(this.user);
     });
   }
 }
