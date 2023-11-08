@@ -1,15 +1,23 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-form',
   templateUrl: './form.component.html',
-  styleUrls: ['./form.component.scss']
+  styleUrls: ['./form.component.scss'],
 })
 export class FormComponent implements OnInit {
+  actionForm = this.fb.group({
+    Mother: ['', Validators.required],
+    Father: ['', Validators.required],
+    Action: ['', Validators.required],
+    Time: ['', Validators.required],
+    Quantity: ['', Validators.required],
+  });
+  constructor(private fb: FormBuilder) {}
 
-  constructor() { }
-
-  ngOnInit(): void {
+  ngOnInit(): void {}
+  onSubmit() {
+    console.log(this.actionForm.value);
   }
-
 }
