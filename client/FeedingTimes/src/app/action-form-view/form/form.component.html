@@ -1,13 +1,22 @@
-<form [formGroup]="actionForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="actionForm" (ngSubmit)="onSubmit()" class="form">
+  <div *ngIf="this.actionForm.invalid" class="alert alert-danger">
+    <div>Form is incomplete</div>
+  </div>
   <label for="Mother">Mother:</label>
   <input id="Mother" type="text" formControlName="Mother" required />
   <label for="Father">Father:</label>
   <input id="Father" type="text" formControlName="Father" required />
-  <mat-form-field>
-    <mat-label>Choose a date</mat-label>
-    <input matInput [matDatepicker]="picker" formControlName="Time" required />
-    <mat-hint>MM/DD/YYYY</mat-hint>
-    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
-  </mat-form-field>
+  <label for="Time">Time:</label>
+  <input
+    matInput
+    id="Time"
+    type="datetime-local"
+    formControlName="Time"
+    required
+  />
+  <label for="Quantity">Quantity:</label>
+  <input id="Quantity" type="number" formControlName="Quantity" required />
+  <button mat-raised-button color="primary" (onClick)="onSubmit()">
+    submit event
+  </button>
 </form>
