@@ -21,7 +21,7 @@ export class UserDataServiceService {
   }
   postFeeding(time: string, quantity: string): Observable<{}> {
     const response = this.httpClient.post(
-      apiEndPoint + 'feedingtimes/' + time + '/quantity/' + quantity,
+      apiEndPoint + 'feedingtimes/' + quantity + '/quantity/' + time,
       {}
     );
     return response;
