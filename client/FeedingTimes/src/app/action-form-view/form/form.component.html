@@ -1,11 +1,35 @@
 <form [formGroup]="actionForm" (ngSubmit)="onSubmit()" class="form">
-  <div *ngIf="this.actionForm.invalid" class="alert alert-danger">
-    <div>Form is incomplete</div>
-  </div>
   <label for="Mother">Mother:</label>
-  <input id="Mother" type="text" formControlName="Mother" required />
+  <input
+    matInput
+    id="Mother"
+    type="text"
+    formControlName="Mother"
+    required
+    [readonly]="true"
+  />
   <label for="Father">Father:</label>
-  <input id="Father" type="text" formControlName="Father" required />
+  <input
+    matInput
+    id="Father"
+    type="text"
+    formControlName="Father"
+    required
+    [readonly]="true"
+  />
+  <label for="Action">Action:</label>
+  <mat-select
+    name="Action"
+    id="Action"
+    matNativeControl
+    required
+    formControlName="Action"
+    color="warn"
+  >
+    <mat-option value="Feeding">Feeding</mat-option>
+    <mat-option value="Shitting">Shitting</mat-option>
+    <mat-option value="Other">Other</mat-option>
+  </mat-select>
   <label for="Time">Time:</label>
   <input
     matInput
@@ -15,7 +39,16 @@
     required
   />
   <label for="Quantity">Quantity:</label>
-  <input id="Quantity" type="number" formControlName="Quantity" required />
+  <input
+    matInput
+    id="Quantity"
+    type="number"
+    formControlName="Quantity"
+    required
+  />
+  <div *ngIf="this.actionForm.invalid" class="alert alert-danger">
+    <div>Form is incomplete, complete form to submit!</div>
+  </div>
   <button mat-raised-button color="primary" (onClick)="onSubmit()">
     submit event
   </button>

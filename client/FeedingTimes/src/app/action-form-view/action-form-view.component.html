@@ -1,1 +1,4 @@
-<app-form></app-form>
+<app-form
+  [parent]="this.parent"
+  (formSubmitEvent)="this.SubmitUser($event)"
+></app-form>

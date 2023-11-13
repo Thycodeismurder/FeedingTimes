@@ -1,11 +1,11 @@
 export type User = {
-  Father: string;
-  Mother: string;
+  Father: string | null | undefined;
+  Mother: string | null | undefined;
   HeVi: [
     {
       Feeding: {
-        quantity: string;
-        time: string;
+        quantity: string | null | undefined;
+        time: string | null | undefined;
       };
     }
   ];
