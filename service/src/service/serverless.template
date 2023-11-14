@@ -2,6 +2,16 @@
   "AWSTemplateFormatVersion": "2010-09-09",
   "Transform": "AWS::Serverless-2016-10-31",
   "Description": "An AWS Serverless Application.",
+  "Globals": {
+    "Api": {
+      "Cors": {
+        "AllowMethods": "'POST', 'GET'",
+        "AllowHeaders": "'*'",
+        "AllowOrigin": "'*'",
+        "AllowCredentials": "true"
+      }
+    }
+  },
   "Resources": {
     "Get": {
       "Type": "AWS::Serverless::Function",
