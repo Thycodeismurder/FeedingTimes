@@ -1,5 +1,5 @@
-<app-top-nav></app-top-nav>
+<app-top-nav [user]="user"></app-top-nav>
 <div class="content">
-  <router-outlet></router-outlet>
+  <router-outlet (activate)="onOutletLoaded($event)"></router-outlet>
 </div>
 <app-bottom-nav></app-bottom-nav>
