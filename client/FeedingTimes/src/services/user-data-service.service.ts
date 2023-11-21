@@ -19,9 +19,15 @@ export class UserDataServiceService {
     const response = this.httpClient.get<User[]>(apiEndPoint + 'feedingtimes');
     return response;
   }
-  postFeeding(time: string, quantity: string): Observable<{}> {
+  postFeeding(time: string, quantity: string, type: string): Observable<{}> {
     const response = this.httpClient.post(
-      apiEndPoint + 'feedingtimes/' + quantity + '/quantity/' + time,
+      apiEndPoint +
+        'feedingtimes/' +
+        quantity +
+        '/quantity/' +
+        time +
+        '/type/' +
+        type,
       {}
     );
     return response;

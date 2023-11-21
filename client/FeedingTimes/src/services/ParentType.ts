@@ -1,4 +1,4 @@
 export type Parent = {
-  Mother: string | null | undefined;
-  Father: string | null | undefined;
+  mother: string | null | undefined;
+  father: string | null | undefined;
 };

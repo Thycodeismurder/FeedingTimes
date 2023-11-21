@@ -92,7 +92,7 @@
           "RootPut": {
             "Type": "Api",
             "Properties": {
-              "Path": "/feedingtimes/{time}/quantity/{quantity}",
+              "Path": "/feedingtimes/{time}/quantity/{quantity}/type/{type}",
               "Method": "POST"
             }
           }

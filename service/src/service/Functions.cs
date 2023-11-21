@@ -37,7 +37,7 @@ public class Functions
         }
         return document.ToJsonPretty();
     }
-    private async Task<string> PostFeedingAsync(string time, string quantity)
+    private async Task<string> PostFeedingAsync(string type, string time, string quantity)
     {
         using var client = new AmazonDynamoDBClient(Amazon.RegionEndpoint.EUWest1);
         var response = await client.UpdateItemAsync(new UpdateItemRequest
@@ -48,8 +48,8 @@ public class Functions
             ExpressionAttributeNames = new Dictionary<string, string>() { { "#list", "HeVi" } },
             ExpressionAttributeValues = new Dictionary<string, AttributeValue> {
                 {":vals", new AttributeValue {L = new List<AttributeValue>() {
-                    new AttributeValue {M = new Dictionary<string, AttributeValue> {{"Feeding", new AttributeValue {M = {{"quantity", new AttributeValue {N = quantity}},
-                    {"time", new AttributeValue { S= time}}}}}}}
+                    new AttributeValue {M = new Dictionary<string, AttributeValue> {{"activity", new AttributeValue {M = {{"quantity", new AttributeValue {N = quantity}},
+                    {"time", new AttributeValue { S= time}}, {"type", new AttributeValue { S= type}}}}}}}
                 }}}
             },
             ReturnValues = "ALL_NEW"
@@ -83,11 +83,12 @@ public class Functions
         var pathParameters = request.PathParameters.ToList();
         var time = pathParameters[0].Value;
         var quantity = pathParameters[1].Value;
+        var type = pathParameters[2].Value;
         context.Logger.LogInformation("time:" + time + " quantity:" + quantity);
         var response = new APIGatewayProxyResponse
         {
             StatusCode = (int)HttpStatusCode.OK,
-            Body = await PostFeedingAsync(time, quantity),
+            Body = await PostFeedingAsync(type, time, quantity),
             Headers = getHeaders()
         };
 

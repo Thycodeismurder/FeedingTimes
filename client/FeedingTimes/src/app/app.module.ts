@@ -9,7 +9,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { CalendarViewComponent } from './calendar-view/calendar-view.component';
 import { ActionFormViewComponent } from './action-form-view/action-form-view.component';
 import { FormComponent } from './action-form-view/form/form.component';
-import { CalendarComponent } from './calendar-view/calendar/calendar.component';
 import { TopNavComponent } from './shared/top-nav/top-nav.component';
 import { BottomNavComponent } from './shared/bottom-nav/bottom-nav.component';
 import { MatButtonModule } from '@angular/material/button';
@@ -21,6 +20,10 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MonthComponent } from './calendar-view/month/month.component';
+import { DayComponent } from './calendar-view/day/day.component';
+import { WeekComponent } from './calendar-view/week/week.component';
+import { ActivityComponent } from './calendar-view/activity/activity.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -28,9 +31,12 @@ import { MatSelectModule } from '@angular/material/select';
     CalendarViewComponent,
     ActionFormViewComponent,
     FormComponent,
-    CalendarComponent,
     TopNavComponent,
     BottomNavComponent,
+    MonthComponent,
+    DayComponent,
+    WeekComponent,
+    ActivityComponent,
   ],
   imports: [
     BrowserModule,

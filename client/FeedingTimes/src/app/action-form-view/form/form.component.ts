@@ -35,8 +35,8 @@ export class FormComponent implements OnInit, OnChanges {
   ngOnInit(): void {}
   ngOnChanges(): void {
     this.actionForm.patchValue({
-      Mother: this.parent?.Mother,
-      Father: this.parent?.Father,
+      Mother: this.parent?.mother,
+      Father: this.parent?.father,
     });
   }
   onSubmit() {
@@ -46,7 +46,8 @@ export class FormComponent implements OnInit, OnChanges {
         Mother: this.actionForm.get('Mother')?.value,
         HeVi: [
           {
-            Feeding: {
+            activity: {
+              type: 'Feeding',
               quantity: this.actionForm.get('Quantity')?.value,
               time: this.actionForm.get('Time')?.value,
             },

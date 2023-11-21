@@ -3,10 +3,18 @@ export type User = {
   Mother: string | null | undefined;
   HeVi: [
     {
-      Feeding: {
-        quantity: string | null | undefined;
-        time: string | null | undefined;
-      };
+      activity: Feeding | UserEvent | null | undefined;
     }
   ];
+};
+
+export type UserEvent = {
+  type: string | null | undefined;
+  description: string | null | undefined;
+  time: string | null | undefined;
+};
+export type Feeding = {
+  type: string | null | undefined;
+  quantity: string | null | undefined;
+  time: string | null | undefined;
 };
