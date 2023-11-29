@@ -1,5 +1,12 @@
 <app-top-nav [user]="user"></app-top-nav>
 <div class="content">
-  <router-outlet (activate)="onOutletLoaded($event)"></router-outlet>
+  <ng-container *ngIf="loading; else notLoading">
+    <div class="content-loading">
+      <mat-spinner></mat-spinner>
+    </div>
+  </ng-container>
+  <ng-template #notLoading>
+    <router-outlet (activate)="onOutletLoaded($event)"></router-outlet>
+  </ng-template>
 </div>
 <app-bottom-nav></app-bottom-nav>

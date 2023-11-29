@@ -1,1 +1,17 @@
-<p>day works!</p>
+<div>day is working</div>
+<div class="day">
+  <div class="day-feeding" *ngFor="let activity of activitiesFeeding">
+    <div class="day-feeding-container">
+      {{ activity.time }}
+      {{ activity.type }}
+      {{ activity.quantity }}
+    </div>
+  </div>
+  <div class="day-userevent" *ngFor="let activity of activitiesUserEvent">
+    <div class="day-userevent-container">
+      {{ activity.time }}
+      {{ activity.type }}
+      {{ activity.description }}
+    </div>
+  </div>
+</div>

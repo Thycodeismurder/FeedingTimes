@@ -15,12 +15,23 @@ import { User } from 'src/services/UserType';
 export class CalendarViewComponent implements OnInit, OnChanges {
   @Input() user: User | undefined;
   activity: Activity | undefined | null;
+  activities: (Activity | null | undefined)[] | undefined = [];
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.activity = this.user?.HeVi[0].activity;
+    console.log(this.user?.HeVi);
+    this.activities = this.user?.HeVi.map((activity) => {
+      return activity.activity;
+    });
+  }
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['user']) {
       this.activity = this.user?.HeVi[0].activity;
+      console.log(this.user?.HeVi);
+      this.activities = this.user?.HeVi.map((activity) => {
+        return activity.activity;
+      });
     }
   }
 }
