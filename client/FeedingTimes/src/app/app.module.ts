@@ -25,6 +25,7 @@ import { DayComponent } from './calendar-view/day/day.component';
 import { WeekComponent } from './calendar-view/week/week.component';
 import { ActivityComponent } from './calendar-view/activity/activity.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { EventComponent } from './calendar-view/event/event.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -38,6 +39,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     DayComponent,
     WeekComponent,
     ActivityComponent,
+    EventComponent,
   ],
   imports: [
     BrowserModule,
