@@ -22,7 +22,6 @@ export class DayComponent implements OnInit, OnChanges {
   ngOnInit(): void {}
   ngOnChanges(changes: SimpleChanges) {
     if (changes['activities']) {
-      console.log(this.activities);
       this.activitiesFeeding = this.activities?.reduce(
         (newArr: Feeding[], activity) => {
           if (activity) {
