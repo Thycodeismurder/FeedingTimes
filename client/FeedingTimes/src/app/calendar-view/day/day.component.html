@@ -5,6 +5,7 @@
       {{ activity.time }}
       {{ activity.type }}
       {{ activity.quantity }}
+      <app-event [feeding]="activity"></app-event>
     </div>
   </div>
   <div class="day-userevent" *ngFor="let activity of activitiesUserEvent">
@@ -12,6 +13,7 @@
       {{ activity.time }}
       {{ activity.type }}
       {{ activity.description }}
+      <app-event [userEvent]="activity"></app-event>
     </div>
   </div>
 </div>

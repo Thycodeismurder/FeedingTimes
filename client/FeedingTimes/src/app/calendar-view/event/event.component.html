@@ -1,22 +1,29 @@
 <div class="event">
-  <img class="event-svg" [src]="iconPath" />
+  <ng-container *ngIf="feeding;else userEventTemplate">
+    <img class="event-svg" [src]="iconPath" />
   <div>
-    {{ timedEvent?.info }}
+    {{ feeding.type }}
   </div>
   <div>
-    hour:
-    {{ timedEvent?.hour }}
+    quantity:
+    {{ feeding.quantity}} ml
   </div>
   <div>
-    day:
-    {{ timedEvent?.day }}
+    date:
+    {{ feeding.time | date: 'fullDate'}}
   </div>
-  <div>
-    month:
-    {{ timedEvent?.month }}
-  </div>
-  <div>
-    year:
-    {{ timedEvent?.year }}
-  </div>
+  </ng-container>
+  <ng-template #userEventTemplate><img class="event-svg" [src]="iconPath" />
+    <div>
+      {{ userEvent?.type }}
+    </div>
+    <div>
+      info:
+      {{ userEvent?.description}}
+    </div>
+    <div>
+      date:
+      {{ userEvent?.time | date: 'fullDate'}}
+    </div>
+  </ng-template>
 </div>

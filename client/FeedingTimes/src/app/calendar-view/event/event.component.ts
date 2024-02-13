@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { TimedEvent } from 'src/services/timedEvent';
+import { Feeding, UserEvent } from 'src/services/UserType';
 
 @Component({
   selector: 'app-event',
@@ -7,20 +7,14 @@ import { TimedEvent } from 'src/services/timedEvent';
   styleUrls: ['./event.component.scss'],
 })
 export class EventComponent implements OnInit {
-  @Input() timedEvent: TimedEvent | undefined;
+  @Input() feeding: Feeding | undefined;
+  @Input() userEvent:  UserEvent | undefined;
   iconPath = '../../../assets/breastfeeding.svg';
   constructor() {}
 
   ngOnInit(): void {
-    this.timedEvent = {
-      type: 'Feeding',
-      info: 'quantity: 120',
-      hour: '12:27',
-      day: '11',
-      month: '12',
-      year: '2023',
-    };
   }
-
+  //make pipe to set up time, one string into multiple ones
+  // make pipe for info
   //make pipe to set up icon, if feeding icon should be breastfeeding
 }
