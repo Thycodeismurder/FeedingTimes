@@ -7,6 +7,8 @@ import {
 } from '@angular/core';
 import { Activity } from 'src/services/ActivityType';
 import { Feeding, UserEvent } from 'src/services/UserType';
+import { TransformEventDataPipe } from 'pipes/transform-event-data.pipe';
+import { TimedEvent } from 'src/services/timedEvent';
 
 @Component({
   selector: 'app-day',
@@ -17,8 +19,13 @@ export class DayComponent implements OnInit, OnChanges {
   @Input() activities: (Activity | null | undefined)[] | undefined;
   activitiesFeeding: Feeding[] | undefined;
   activitiesUserEvent: UserEvent[] | undefined;
-  constructor() {}
-
+  transformEventData: any;
+  constructor() {
+    this.transformEventData =  new TransformEventDataPipe();
+  }
+  transformData(data: Feeding | UserEvent): TimedEvent {
+   return this.transformEventData.transform(data)
+  }
   ngOnInit(): void {}
   ngOnChanges(changes: SimpleChanges) {
     if (changes['activities']) {

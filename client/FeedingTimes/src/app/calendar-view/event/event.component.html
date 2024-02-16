@@ -1,29 +1,12 @@
 <div class="event">
-  <ng-container *ngIf="feeding;else userEventTemplate">
-    <img class="event-svg" [src]="iconPath" />
+  <img class="event-svg" [src]="iconPath" />
   <div>
-    {{ feeding.type }}
+    {{event?.type}}
+  </div>
+  <div> 
+    {{event?.info}}
   </div>
   <div>
-    quantity:
-    {{ feeding.quantity}} ml
+    {{event?.time | date: 'fullDate'}}
   </div>
-  <div>
-    date:
-    {{ feeding.time | date: 'fullDate'}}
-  </div>
-  </ng-container>
-  <ng-template #userEventTemplate><img class="event-svg" [src]="iconPath" />
-    <div>
-      {{ userEvent?.type }}
-    </div>
-    <div>
-      info:
-      {{ userEvent?.description}}
-    </div>
-    <div>
-      date:
-      {{ userEvent?.time | date: 'fullDate'}}
-    </div>
-  </ng-template>
 </div>

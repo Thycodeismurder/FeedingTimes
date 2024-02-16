@@ -1,19 +1,6 @@
 <div>day is working</div>
 <div class="day">
-  <div class="day-feeding" *ngFor="let activity of activitiesFeeding">
-    <div class="day-feeding-container">
-      {{ activity.time }}
-      {{ activity.type }}
-      {{ activity.quantity }}
-      <app-event [feeding]="activity"></app-event>
-    </div>
-  </div>
-  <div class="day-userevent" *ngFor="let activity of activitiesUserEvent">
-    <div class="day-userevent-container">
-      {{ activity.time }}
-      {{ activity.type }}
-      {{ activity.description }}
-      <app-event [userEvent]="activity"></app-event>
-    </div>
+  <div class="day-event" *ngFor="let activity of activities">
+    <app-event [event]="this.transformData(activity!)"></app-event>
   </div>
 </div>
