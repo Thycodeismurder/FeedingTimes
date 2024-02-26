@@ -1,6 +1,6 @@
 <div>day is working</div>
 <div class="day">
   <div class="day-event" *ngFor="let activity of activities">
-    <app-event [event]="this.transformData(activity!)"></app-event>
+    <app-event [event]="activity!"></app-event>
   </div>
 </div>

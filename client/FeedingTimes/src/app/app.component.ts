@@ -1,5 +1,6 @@
 import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { User } from 'src/services/UserType';
+import { TimedEvent } from 'src/services/timedEvent';
 import { UserDataServiceService } from 'src/services/user-data-service.service';
 
 @Component({
@@ -8,15 +9,17 @@ import { UserDataServiceService } from 'src/services/user-data-service.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit, OnChanges {
-  user: User | undefined;
+  users: User[] | undefined;
+  activities: TimedEvent[] | undefined;
   title = 'FeedingTimes';
   loading = true;
   constructor(private userService: UserDataServiceService) {}
 
   ngOnInit(): void {
-    this.userService.getAll().subscribe((data) => {
-      this.user = data[0];
+    this.userService.getAll().subscribe(() => {
       this.loading = false;
+      this.users = this.userService.getUsers()
+      this.activities = this.userService.getActivities();
     });
   }
   ngOnChanges(changes: SimpleChanges): void {
@@ -25,6 +28,7 @@ export class AppComponent implements OnInit, OnChanges {
     }
   }
   onOutletLoaded(component: any) {
-    component.user = this.user;
+    component.user = this.users;
+    component.activities = this.activities;
   }
 }

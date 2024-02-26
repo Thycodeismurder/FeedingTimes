@@ -7,31 +7,24 @@ import {
 } from '@angular/core';
 import { Activity } from 'src/services/ActivityType';
 import { User } from 'src/services/UserType';
+import { TimedEvent } from 'src/services/timedEvent';
 @Component({
   selector: 'app-calendar-view',
   templateUrl: './calendar-view.component.html',
   styleUrls: ['./calendar-view.component.scss'],
 })
 export class CalendarViewComponent implements OnInit, OnChanges {
-  @Input() user: User | undefined;
-  activity: Activity | undefined | null;
-  activities: (Activity | null | undefined)[] | undefined = [];
+  @Input() users: User[] | undefined;
+  @Input() activities : TimedEvent[] | undefined;
+  activity: TimedEvent | undefined | null;
   constructor() {}
 
   ngOnInit(): void {
-    this.activity = this.user?.HeVi[0].activity;
-    console.log(this.user?.HeVi);
-    this.activities = this.user?.HeVi.map((activity) => {
-      return activity.activity;
-    });
+    this.activity = this.activities?.[0];
   }
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['user']) {
-      this.activity = this.user?.HeVi[0].activity;
-      console.log(this.user?.HeVi);
-      this.activities = this.user?.HeVi.map((activity) => {
-        return activity.activity;
-      });
+      this.activity = this.activities?.[0];
     }
   }
 }
