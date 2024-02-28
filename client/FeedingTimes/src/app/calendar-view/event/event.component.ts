@@ -8,8 +8,8 @@ import { TimedEvent } from 'src/services/timedEvent';
 })
 export class EventComponent implements OnInit {
   @Input() event: TimedEvent | undefined;
-  iconPath = '../../../assets/breastfeeding.svg';
-  constructor() {}
+  constructor() {
+  }
 
   ngOnInit(): void {
   }

@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { User } from './UserType';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { TimedEvent } from './timedEvent';
-import { TransformEventDataPipe } from 'pipes/transform-event-data.pipe';
+import { TransformEventDataPipe } from 'src/app/pipes/transform-event-data.pipe';
 
 const apiEndPoint =
   'https://v0zp9or438.execute-api.eu-west-1.amazonaws.com/Prod/';
@@ -31,8 +31,8 @@ export class UserDataServiceService {
   }
   getActivities(): TimedEvent[] {
     if(this.users && this.users[0].HeVi)
-    return this.users[0].HeVi.map((Hevi) => Hevi.activity? this.transformEventData.transform(Hevi.activity) : {type: '', info: '', time: ''} ) 
-    else return [{type: '', info: '', time: ''}]
+    return this.users[0].HeVi.map((Hevi) => Hevi.activity? this.transformEventData.transform(Hevi.activity) : {type: '', info: '', time: '', iconPath: ''} ) 
+    else return [{type: '', info: '', time: '', iconPath: ''}]
   }
   postFeeding(time: string, quantity: string, type: string): Observable<{}> {
     const response = this.httpClient.post(

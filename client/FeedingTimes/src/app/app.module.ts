@@ -26,7 +26,8 @@ import { WeekComponent } from './calendar-view/week/week.component';
 import { ActivityComponent } from './calendar-view/activity/activity.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { EventComponent } from './calendar-view/event/event.component';
-import { TransformEventDataPipe } from '../../pipes/transform-event-data.pipe';
+import { TransformEventDataPipe } from './pipes/transform-event-data.pipe';
+import { TransformIconsPipe } from './pipes/transform-icons.pipe';
 @NgModule({
   declarations: [
     AppComponent,
@@ -42,6 +43,7 @@ import { TransformEventDataPipe } from '../../pipes/transform-event-data.pipe';
     ActivityComponent,
     EventComponent,
     TransformEventDataPipe,
+    TransformIconsPipe,
   ],
   imports: [
     BrowserModule,

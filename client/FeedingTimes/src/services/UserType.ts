@@ -12,9 +12,11 @@ export type UserEvent = {
   type: string | null | undefined;
   description: string | null | undefined;
   time: string | null | undefined;
+  icon: string | null | undefined;
 };
 export type Feeding = {
   type: string | null | undefined;
   quantity: string | null | undefined;
   time: string | null | undefined;
+  icon: string | null | undefined;
 };

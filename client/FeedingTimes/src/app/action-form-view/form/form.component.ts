@@ -50,6 +50,7 @@ export class FormComponent implements OnInit, OnChanges {
               type: 'Feeding',
               quantity: this.actionForm.get('Quantity')?.value,
               time: this.actionForm.get('Time')?.value,
+              icon: 'breastfeeding'
             },
           },
         ],
