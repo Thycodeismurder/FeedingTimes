@@ -3,8 +3,8 @@ import {
   Input,
   OnInit,
 } from '@angular/core';
-import { Feeding, UserEvent } from 'src/services/UserType';
-import { TimedEvent } from 'src/services/timedEvent';
+import { Feeding, UserEvent } from 'src/services/User';
+import { Activity } from 'src/services/Activity';
 
 @Component({
   selector: 'app-activity',
@@ -12,7 +12,7 @@ import { TimedEvent } from 'src/services/timedEvent';
   styleUrls: ['./activity.component.scss'],
 })
 export class ActivityComponent implements OnInit {
-  @Input() activity: TimedEvent | null | undefined;
+  @Input() activity: Activity | null | undefined;
   activityFeeding: Feeding | undefined;
   activityUserEvent: UserEvent | undefined;
   constructor() {}

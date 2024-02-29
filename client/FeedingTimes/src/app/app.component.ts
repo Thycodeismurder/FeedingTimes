@@ -1,6 +1,6 @@
 import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { User } from 'src/services/UserType';
-import { TimedEvent } from 'src/services/timedEvent';
+import { User } from 'src/services/User';
+import { Activity } from 'src/services/Activity';
 import { UserDataServiceService } from 'src/services/user-data-service.service';
 
 @Component({
@@ -10,7 +10,7 @@ import { UserDataServiceService } from 'src/services/user-data-service.service';
 })
 export class AppComponent implements OnInit, OnChanges {
   users: User[] | undefined;
-  activities: TimedEvent[] | undefined;
+  activities: Activity[] | undefined;
   title = 'FeedingTimes';
   loading = true;
   constructor(private userService: UserDataServiceService) {}

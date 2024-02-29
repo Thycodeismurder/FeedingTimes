@@ -7,8 +7,8 @@ import {
   EventEmitter,
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Parent } from 'src/services/ParentType';
-import { User } from 'src/services/UserType';
+import { Parent } from 'src/services/Parent';
+import { User } from 'src/services/User';
 
 @Component({
   selector: 'app-form',

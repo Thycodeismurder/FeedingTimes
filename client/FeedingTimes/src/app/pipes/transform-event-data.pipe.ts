@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Feeding, UserEvent } from 'src/services/UserType';
-import { TimedEvent } from 'src/services/timedEvent';
+import { Feeding, UserEvent } from 'src/services/User';
+import { Activity } from 'src/services/Activity';
 import { TransformIconsPipe } from './transform-icons.pipe';
 
 @Pipe({
@@ -8,8 +8,8 @@ import { TransformIconsPipe } from './transform-icons.pipe';
 })
 export class TransformEventDataPipe implements PipeTransform {
 
-  transform(value: UserEvent | Feeding, ...args: unknown[]): TimedEvent {
-    let output : TimedEvent;
+  transform(value: UserEvent | Feeding, ...args: unknown[]): Activity {
+    let output : Activity;
     let iconTransform = new TransformIconsPipe();
     if ('quantity'in value ) {
       output = {

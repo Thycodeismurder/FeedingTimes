@@ -5,9 +5,8 @@ import {
   OnChanges,
   SimpleChanges,
 } from '@angular/core';
-import { Activity } from 'src/services/ActivityType';
-import { User } from 'src/services/UserType';
-import { TimedEvent } from 'src/services/timedEvent';
+import { User } from 'src/services/User';
+import { Activity } from 'src/services/Activity';
 @Component({
   selector: 'app-calendar-view',
   templateUrl: './calendar-view.component.html',
@@ -15,8 +14,8 @@ import { TimedEvent } from 'src/services/timedEvent';
 })
 export class CalendarViewComponent implements OnInit, OnChanges {
   @Input() users: User[] | undefined;
-  @Input() activities : TimedEvent[] | undefined;
-  activity: TimedEvent | undefined | null;
+  @Input() activities : Activity[] | undefined;
+  activity: Activity | undefined | null;
   constructor() {}
 
   ngOnInit(): void {

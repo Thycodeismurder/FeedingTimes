@@ -3,10 +3,12 @@ export type User = {
   Mother: string | null | undefined;
   HeVi: [
     {
-      activity: Feeding | UserEvent | null | undefined;
+      activity: DbActivity | null | undefined;
     }
   ];
 };
+
+export type DbActivity = Feeding | UserEvent;
 
 export type UserEvent = {
   type: string | null | undefined;

@@ -3,7 +3,7 @@ import {
   Input,
   OnInit,
 } from '@angular/core';
-import { TimedEvent } from 'src/services/timedEvent';
+import { Activity } from 'src/services/Activity';
 
 @Component({
   selector: 'app-day',
@@ -11,7 +11,7 @@ import { TimedEvent } from 'src/services/timedEvent';
   styleUrls: ['./day.component.scss'],
 })
 export class DayComponent implements OnInit {
-  @Input() activities: (TimedEvent | null | undefined)[] | undefined;
+  @Input() activities: (Activity | null | undefined)[] | undefined;
   constructor() {}
   ngOnInit(): void {}
 }

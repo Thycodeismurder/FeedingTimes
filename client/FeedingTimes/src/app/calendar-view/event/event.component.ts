@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { TimedEvent } from 'src/services/timedEvent';
+import { Activity } from 'src/services/Activity';
 
 @Component({
   selector: 'app-event',
@@ -7,7 +7,7 @@ import { TimedEvent } from 'src/services/timedEvent';
   styleUrls: ['./event.component.scss'],
 })
 export class EventComponent implements OnInit {
-  @Input() event: TimedEvent | undefined;
+  @Input() event: Activity | undefined;
   constructor() {
   }
 

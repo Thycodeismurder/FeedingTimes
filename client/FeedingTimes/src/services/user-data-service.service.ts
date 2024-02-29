@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { User } from './UserType';
+import { User } from './User';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { TimedEvent } from './timedEvent';
+import { Activity } from './Activity';
 import { TransformEventDataPipe } from 'src/app/pipes/transform-event-data.pipe';
 
 const apiEndPoint =
@@ -29,7 +29,7 @@ export class UserDataServiceService {
   getUsers(): User[] | undefined {
     return this.users
   }
-  getActivities(): TimedEvent[] {
+  getActivities(): Activity[] {
     if(this.users && this.users[0].HeVi)
     return this.users[0].HeVi.map((Hevi) => Hevi.activity? this.transformEventData.transform(Hevi.activity) : {type: '', info: '', time: '', iconPath: ''} ) 
     else return [{type: '', info: '', time: '', iconPath: ''}]
