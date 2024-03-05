@@ -18,16 +18,33 @@ public class Functions
     public Functions()
     {
     }
-    private async Task<string> QueryTable()
+    private async Task<string> QueryCalendarData()
     {
         using var client = new AmazonDynamoDBClient(Amazon.RegionEndpoint.EUWest1);
         var response = await client.QueryAsync(new QueryRequest
         {
-            TableName = "FeedingTimes",
-            KeyConditionExpression = "Mother = :v_Mother and Father = :v_Father",
+            TableName = "CalendarData",
+            KeyConditionExpression = "UserUUID = :v_UserUUID",
             ExpressionAttributeValues = new Dictionary<string, AttributeValue> {
-                {":v_Mother", new AttributeValue{S = "Heidi"}},
-                {":v_Father", new AttributeValue{S = "Ville"}}
+                {":v_UserUUID", new AttributeValue{S = "aa1c6070-f8d9-4739-88db-dc1b5cff1efe"}}
+            }
+        });
+        List<Document> document = new List<Document>();
+        foreach (var item in response.Items)
+        {
+            document.Add(Document.FromAttributeMap(item));
+        }
+        return document.ToJsonPretty();
+    }
+    private async Task<string> QueryUserData()
+    {
+        using var client = new AmazonDynamoDBClient(Amazon.RegionEndpoint.EUWest1);
+        var response = await client.QueryAsync(new QueryRequest
+        {
+            TableName = "User",
+            KeyConditionExpression = "UserUUID = :v_UserUUID",
+            ExpressionAttributeValues = new Dictionary<string, AttributeValue> {
+                {":v_UserUUID", new AttributeValue{S = "aa1c6070-f8d9-4739-88db-dc1b5cff1efe"}}
             }
         });
         List<Document> document = new List<Document>();
@@ -64,14 +81,27 @@ public class Functions
     /// </summary>
     /// <param name="request"></param>
     /// <returns>The API Gateway response.</returns>
-    public async Task<APIGatewayProxyResponse> Get(APIGatewayProxyRequest request, ILambdaContext context)
+    public async Task<APIGatewayProxyResponse> GetUserData(APIGatewayProxyRequest request, ILambdaContext context)
     {
         context.Logger.LogInformation("Get Request\n");
 
         var response = new APIGatewayProxyResponse
         {
             StatusCode = (int)HttpStatusCode.OK,
-            Body = await QueryTable(),
+            Body = await QueryUserData(),
+            Headers = getHeaders()
+        };
+
+        return response;
+    }
+    public async Task<APIGatewayProxyResponse> GetCalendarData(APIGatewayProxyRequest request, ILambdaContext context)
+    {
+        context.Logger.LogInformation("Get Request\n");
+
+        var response = new APIGatewayProxyResponse
+        {
+            StatusCode = (int)HttpStatusCode.OK,
+            Body = await QueryCalendarData(),
             Headers = getHeaders()
         };
 

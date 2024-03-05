@@ -13,13 +13,13 @@
     }
   },
   "Resources": {
-    "Get": {
+    "GetUserData": {
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Architectures": [
           "x86_64"
         ],
-        "Handler": "service::service.Functions::Get",
+        "Handler": "service::service.Functions::GetUserData",
         "Runtime": "dotnet6",
         "CodeUri": "",
         "MemorySize": 256,
@@ -49,7 +49,50 @@
           "RootGet": {
             "Type": "Api",
             "Properties": {
-              "Path": "/feedingtimes/",
+              "Path": "/feedingtimes/user",
+              "Method": "GET"
+            }
+          }
+        }
+      }
+    },
+    "GetCalendarData": {
+      "Type": "AWS::Serverless::Function",
+      "Properties": {
+        "Architectures": [
+          "x86_64"
+        ],
+        "Handler": "service::service.Functions::GetCalendarData",
+        "Runtime": "dotnet6",
+        "CodeUri": "",
+        "MemorySize": 256,
+        "Timeout": 30,
+        "Role": null,
+        "Policies": [
+          "AWSLambdaBasicExecutionRole",
+          {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Action": [
+                  "dynamodb:Query"
+                ],
+                "Resource": "*"
+              },
+              {
+                "Effect": "Allow",
+                "Action": "lambda:InvokeFunction",
+                "Resource": "*"
+              }
+            ]
+          }
+        ],
+        "Events": {
+          "RootGet": {
+            "Type": "Api",
+            "Properties": {
+              "Path": "/feedingtimes/calendardata",
               "Method": "GET"
             }
           }
