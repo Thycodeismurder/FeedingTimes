@@ -52,7 +52,7 @@ public class Functions
         {
             document.Add(Document.FromAttributeMap(item));
         }
-        return document.ToJsonPretty();
+        return document[0].ToJsonPretty();
     }
     private async Task<string> PostFeedingAsync(string type, string time, string quantity)
     {

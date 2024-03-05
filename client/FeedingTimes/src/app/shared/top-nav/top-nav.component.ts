@@ -7,7 +7,7 @@ import { User } from 'src/services/User';
   styleUrls: ['./top-nav.component.scss'],
 })
 export class TopNavComponent implements OnInit {
-  @Input() users: User[] | undefined;
+  @Input() user: User | undefined;
   logoPath: string = '../../../assets/Logo.png';
   constructor() {}
 

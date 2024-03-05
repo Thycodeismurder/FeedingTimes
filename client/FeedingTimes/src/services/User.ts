@@ -1,14 +1,15 @@
 export type User = {
-  Father: string | null | undefined;
-  Mother: string | null | undefined;
-  HeVi: [
-    {
-      activity: DbActivity | null | undefined;
-    }
-  ];
+  UserUUID: string | null | undefined;
+  Parents: {
+    [key: string]: string
+  }
 };
 
-export type DbActivity = Feeding | UserEvent;
+export type DbActivity = {
+  activities: Feeding[] | UserEvent[];
+  Date: string;
+  UserUUID: string;
+};
 
 export type UserEvent = {
   type: string | null | undefined;

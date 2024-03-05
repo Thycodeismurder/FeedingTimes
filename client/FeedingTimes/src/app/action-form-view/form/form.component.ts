@@ -41,20 +41,7 @@ export class FormComponent implements OnInit, OnChanges {
   }
   onSubmit() {
     if (!this.actionForm.invalid) {
-      this.user = {
-        Father: this.actionForm.get('Father')?.value,
-        Mother: this.actionForm.get('Mother')?.value,
-        HeVi: [
-          {
-            activity: {
-              type: 'Feeding',
-              quantity: this.actionForm.get('Quantity')?.value,
-              time: this.actionForm.get('Time')?.value,
-              icon: 'breastfeeding'
-            },
-          },
-        ],
-      };
+      //create service need to be done first
       console.log(this.user);
       this.formSubmitEvent.emit(this.user);
     } else {

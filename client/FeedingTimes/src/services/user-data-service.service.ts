@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { User } from './User';
+import { DbActivity, User } from './User';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Activity } from './Activity';
 import { TransformEventDataPipe } from 'src/app/pipes/transform-event-data.pipe';
@@ -16,22 +16,31 @@ httpOptions.headers.append('Content-Type', 'text/plain');
 })
 export class UserDataServiceService {
   transformEventData: TransformEventDataPipe;
-  users : User[] | undefined;
+  user : User | undefined;
+  DbActivities : DbActivity[] |undefined;
   constructor(private httpClient: HttpClient) {
     this.transformEventData = new TransformEventDataPipe();
   }
 
-  getAll(): Observable<User[]> {
-    const response = this.httpClient.get<User[]>(apiEndPoint + 'feedingtimes');
-    response.subscribe((data) => { this.users = data});
+  getUserData(): Observable<User> {
+    const response = this.httpClient.get<User>(apiEndPoint + 'feedingtimes/user');
+    response.subscribe((data) => { this.user = data});
     return response;
   }
-  getUsers(): User[] | undefined {
-    return this.users
+  getUser(): User | undefined {
+    return this.user
   }
-  getActivities(): Activity[] {
-    if(this.users && this.users[0].HeVi)
-    return this.users[0].HeVi.map((Hevi) => Hevi.activity? this.transformEventData.transform(Hevi.activity) : {type: '', info: '', time: '', iconPath: ''} ) 
+  getActivitiesData(): Observable<DbActivity[]> {
+    const response = this.httpClient.get<DbActivity[]>(apiEndPoint+'feedingtimes/calendardata')
+    response.subscribe((data) => {this.DbActivities = data})
+    return response
+  }
+  getActivities(): Activity[] | undefined {
+    if (this.DbActivities) {
+      let activities : Activity[] | undefined;
+      this.DbActivities.forEach((DbActivity) => {activities = DbActivity? DbActivity.activities.map((activity) => this.transformEventData.transform(activity) ) : [{type: '', info: '', time: '', iconPath: ''}]} ) 
+      return activities;
+    }
     else return [{type: '', info: '', time: '', iconPath: ''}]
   }
   postFeeding(time: string, quantity: string, type: string): Observable<{}> {

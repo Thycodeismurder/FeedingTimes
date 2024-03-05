@@ -14,10 +14,10 @@ export class ActionFormViewComponent implements OnInit {
   constructor(private userService: UserDataServiceService) {}
 
   ngOnInit(): void {
-    this.parent = { mother: this.user?.Mother, father: this.user?.Father };
+    /* this.parent = { mother: this.user?.Mother, father: this.user?.Father }; */
   }
   SubmitUser(user: User) {
-    if (user.HeVi[0].activity) {
+    /* if (user.HeVi[0].activity) {
       if ('quantity' in user.HeVi[0].activity) {
         this.userService
           .postFeeding(
@@ -29,6 +29,6 @@ export class ActionFormViewComponent implements OnInit {
             console.log(data);
           });
       }
-    }
+    } */
   }
 }
