@@ -1,6 +1,6 @@
-<div>day is working</div>
 <div class="day">
-  <div class="day-event" *ngFor="let activity of activities">
-    <app-event [event]="activity!"></app-event>
+  <div class="day-date">{{this.activities?.[0]?.time | date : 'dd' }}</div>
+  <div class="day-activity" *ngFor="let activity of activities">
+    <app-activity [activity]="activity!"></app-activity>
   </div>
 </div>

@@ -1,9 +1,4 @@
-import {
-  Component,
-  Input,
-  OnInit,
-} from '@angular/core';
-import { Feeding, UserEvent } from 'src/services/User';
+import { Component, Input, OnInit } from '@angular/core';
 import { Activity } from 'src/services/Activity';
 
 @Component({
@@ -12,10 +7,10 @@ import { Activity } from 'src/services/Activity';
   styleUrls: ['./activity.component.scss'],
 })
 export class ActivityComponent implements OnInit {
-  @Input() activity: Activity | null | undefined;
-  activityFeeding: Feeding | undefined;
-  activityUserEvent: UserEvent | undefined;
-  constructor() {}
+  @Input() activity: Activity | undefined | null;
+  constructor() {
+  }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 }

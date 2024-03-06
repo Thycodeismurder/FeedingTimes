@@ -1,3 +1,13 @@
-.day-event {
-    padding: 10px;
+@import '../../../styles/styles.scss';
+.day {
+    display: grid;
+    width: 100%;
+    border: 1px solid $light-gray;
+    border-radius: 8px;
 }
+    .day-date {
+        text-align: center;
+    }
+    .day-activity {
+        padding: 10px;
+    }

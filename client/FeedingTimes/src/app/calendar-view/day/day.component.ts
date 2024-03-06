@@ -13,5 +13,12 @@ import { Activity } from 'src/services/Activity';
 export class DayComponent implements OnInit {
   @Input() activities: (Activity | null | undefined)[] | undefined;
   constructor() {}
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.activities) 
+      {
+        this.activities = this.activities?.sort((a, b) => {
+        return +new Date(a!.time) - +new Date(b!.time);
+      })
+    }
+  }
 }

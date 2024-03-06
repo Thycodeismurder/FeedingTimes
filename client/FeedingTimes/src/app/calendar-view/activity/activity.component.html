@@ -1,17 +1,12 @@
-<p>activity works!</p>
-<ng-container *ngIf="this.activityFeeding; else userEvent">
-  <div class="activity">
-    <div class="activity-type">{{ this.activityFeeding.type }}</div>
-    <div class="activity-time">{{ this.activityFeeding.time }}</div>
-    <div class="activity-quantity">{{ this.activityFeeding.quantity }}</div>
+<div class="activity">
+  <img class="activity-svg" [src]="this.activity?.iconPath" />
+  <div>
+    {{activity?.type}}
   </div>
-</ng-container>
-<ng-template #userEvent>
-  <div class="activity">
-    <div class="activity-type">{{ this.activityUserEvent?.type }}</div>
-    <div class="activity-time">{{ this.activityUserEvent?.time }}</div>
-    <div class="activity-description">
-      {{ this.activityUserEvent?.description }}
-    </div>
+  <div> 
+    {{activity?.info}}
   </div>
-</ng-template>
+  <div>
+    {{activity?.time | date: 'medium'}}
+  </div>
+</div>
