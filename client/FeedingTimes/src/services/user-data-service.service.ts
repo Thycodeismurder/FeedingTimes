@@ -43,16 +43,10 @@ export class UserDataServiceService {
     }
     else return [{type: '', info: '', time: '', iconPath: ''}]
   }
-  postFeeding(time: string, quantity: string, type: string): Observable<{}> {
+  postFeeding(time: string, quantity: string, type: string, icon: string): Observable<{}> {
     const response = this.httpClient.post(
       apiEndPoint +
-        'feedingtimes/' +
-        quantity +
-        '/quantity/' +
-        time +
-        '/type/' +
-        type,
-      {}
+        'feedingtimes/postactivity', JSON.stringify('Time:'+time + ',Quantity:' +quantity+ ',Type:' +type+ ',Icon:' +icon)
     );
     return response;
   }

@@ -7,6 +7,7 @@ import {
   EventEmitter,
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Activity } from 'src/services/Activity';
 import { Parent } from 'src/services/Parent';
 import { User } from 'src/services/User';
 
@@ -17,8 +18,8 @@ import { User } from 'src/services/User';
 })
 export class FormComponent implements OnInit, OnChanges {
   @Input() parent: Parent | undefined;
-  @Output() formSubmitEvent = new EventEmitter<User>();
-  user: User | undefined;
+  @Output() formSubmitEvent = new EventEmitter<Activity>();
+  activity: Activity | undefined;
   actionForm = new FormGroup(
     {
       Mother: new FormControl('', Validators.required),
@@ -42,8 +43,8 @@ export class FormComponent implements OnInit, OnChanges {
   onSubmit() {
     if (!this.actionForm.invalid) {
       //create service need to be done first
-      console.log(this.user);
-      this.formSubmitEvent.emit(this.user);
+      console.log(this.activity);
+      this.formSubmitEvent.emit(this.activity);
     } else {
       console.log('hipheierror');
     }

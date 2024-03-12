@@ -132,11 +132,14 @@
           }
         ],
         "Events": {
-          "RootPut": {
+          "RootPost": {
             "Type": "Api",
             "Properties": {
-              "Path": "/feedingtimes/{time}/quantity/{quantity}/type/{type}",
-              "Method": "POST"
+              "Path": "/feedingtimes/postactivity",
+              "Method": "POST",
+              "RestApiId": {
+                "Ref": "ServerlessRestApi"
+              }
             }
           }
         }

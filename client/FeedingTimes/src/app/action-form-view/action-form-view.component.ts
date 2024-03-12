@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Activity } from 'src/services/Activity';
 import { Parent } from 'src/services/Parent';
 import { User } from 'src/services/User';
 import { UserDataServiceService } from 'src/services/user-data-service.service';
@@ -16,19 +17,16 @@ export class ActionFormViewComponent implements OnInit {
   ngOnInit(): void {
     /* this.parent = { mother: this.user?.Mother, father: this.user?.Father }; */
   }
-  SubmitUser(user: User) {
-    /* if (user.HeVi[0].activity) {
-      if ('quantity' in user.HeVi[0].activity) {
+  SubmitUser(activity: Activity) {
         this.userService
           .postFeeding(
-            user.HeVi[0].activity.time!,
-            user.HeVi[0].activity.quantity!,
-            user.HeVi[0].activity.type!
+            activity.time!,
+            activity.info!,
+            activity.type!,
+            activity.iconPath
           )
           .subscribe((data) => {
             console.log(data);
           });
-      }
-    } */
   }
 }
