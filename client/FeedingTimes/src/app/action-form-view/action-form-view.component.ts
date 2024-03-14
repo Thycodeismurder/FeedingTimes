@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Activity } from 'src/services/Activity';
 import { Parent } from 'src/services/Parent';
-import { User } from 'src/services/User';
+import { ActivityTypes, User } from 'src/services/User';
 import { UserDataServiceService } from 'src/services/user-data-service.service';
 
 @Component({
@@ -17,13 +16,10 @@ export class ActionFormViewComponent implements OnInit {
   ngOnInit(): void {
     /* this.parent = { mother: this.user?.Mother, father: this.user?.Father }; */
   }
-  SubmitUser(activity: Activity) {
+  SubmitUser(activity: ActivityTypes) {
         this.userService
-          .postFeeding(
-            activity.time!,
-            activity.info!,
-            activity.type!,
-            activity.iconPath
+          .postActivity(
+            activity
           )
           .subscribe((data) => {
             console.log(data);

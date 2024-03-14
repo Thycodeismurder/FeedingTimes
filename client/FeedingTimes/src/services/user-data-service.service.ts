@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { DbActivity, User } from './User';
+import { Observable, Subscriber, observable } from 'rxjs';
+import { ActivityTypes, DbActivity, User, Feeding, UserEvent } from './User';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Activity } from './Activity';
 import { TransformEventDataPipe } from 'src/app/pipes/transform-event-data.pipe';
@@ -43,11 +43,24 @@ export class UserDataServiceService {
     }
     else return [{type: '', info: '', time: '', iconPath: ''}]
   }
-  postFeeding(time: string, quantity: string, type: string, icon: string): Observable<{}> {
-    const response = this.httpClient.post(
-      apiEndPoint +
-        'feedingtimes/postactivity', JSON.stringify('Time:'+time + ',Quantity:' +quantity+ ',Type:' +type+ ',Icon:' +icon)
-    );
-    return response;
+  postActivity(activity: ActivityTypes): Observable<{}> {
+    if(activity.type === 'Feeding' && 'quantity' in activity) {
+      const response = this.httpClient.post(
+        apiEndPoint +
+          'feedingtimes/postactivity', JSON.stringify(activity, (key, value) => {if (typeof value === 'number') {return String(value)} return value})
+      );
+      return response;
+    } else if(activity.type === 'Poop' && 'description' in activity || activity.type === 'Other' && 'description' in activity) {
+      const response = this.httpClient.post(
+        apiEndPoint +
+          'feedingtimes/postactivity', JSON.stringify(activity, (key, value) => {if (typeof value === 'number') {return String(value)} return value})
+      );
+      return response;
+    } else {
+      const response = new Observable<{}>((subscriber)=> {
+        subscriber.error('not supported format')
+      })
+      return response;
+    }
   }
 }

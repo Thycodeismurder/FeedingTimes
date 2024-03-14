@@ -1,32 +1,29 @@
 import {
   Component,
   Input,
-  OnChanges,
   OnInit,
   Output,
   EventEmitter,
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Activity } from 'src/services/Activity';
 import { Parent } from 'src/services/Parent';
-import { User } from 'src/services/User';
+import { ActivityTypes, DbActivity, Feeding, UserEvent } from 'src/services/User';
 
 @Component({
   selector: 'app-form',
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.scss'],
 })
-export class FormComponent implements OnInit, OnChanges {
+export class FormComponent implements OnInit {
   @Input() parent: Parent | undefined;
-  @Output() formSubmitEvent = new EventEmitter<Activity>();
-  activity: Activity | undefined;
-  actionForm = new FormGroup(
+  @Output() formSubmitEvent = new EventEmitter<ActivityTypes>();
+  activity: ActivityTypes | undefined;
+  activityForm = new FormGroup(
     {
-      Mother: new FormControl('', Validators.required),
-      Father: new FormControl('', Validators.required),
-      Action: new FormControl('Feeding', Validators.required),
+      Type: new FormControl('Feeding', Validators.required),
       Time: new FormControl('', Validators.required),
       Quantity: new FormControl('', Validators.required),
+      Icon: new FormControl('Breastfeeding', Validators.required),
     },
     { updateOn: 'submit' }
   );
@@ -34,19 +31,36 @@ export class FormComponent implements OnInit, OnChanges {
   constructor() {}
 
   ngOnInit(): void {}
-  ngOnChanges(): void {
-    this.actionForm.patchValue({
-      Mother: this.parent?.mother,
-      Father: this.parent?.father,
-    });
-  }
   onSubmit() {
-    if (!this.actionForm.invalid) {
-      //create service need to be done first
-      console.log(this.activity);
+    if (this.activityForm.status == 'INVALID') {
+      console.log('hipheierror');
+      this.activityForm.hasError('check form');
+    } else  if (this.activityForm.status == 'VALID') {
+      if(this.activityForm.value.Type === 'Feeding') {
+        this.activity = {
+          type : this.activityForm.value.Type,
+          icon: this.activityForm.value.Icon,
+          quantity: this.activityForm.value.Quantity,
+          time: this.activityForm.value.Time
+        }
+      }else if (this.activityForm.value.Type === 'Poop') {
+        this.activity = {
+          type : this.activityForm.value.Type,
+          icon: this.activityForm.value.Icon,
+          description: this.activityForm.value.Quantity,
+          time: this.activityForm.value.Time
+        }
+      } else {
+        this.activity = {
+          type : this.activityForm.value.Type,
+          icon: this.activityForm.value.Icon,
+          description: this.activityForm.value.Quantity,
+          time: this.activityForm.value.Time
+        }
+      }
       this.formSubmitEvent.emit(this.activity);
     } else {
-      console.log('hipheierror');
+      this.activityForm.hasError;
     }
-  }
+  } 
 }

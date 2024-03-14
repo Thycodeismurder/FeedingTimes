@@ -6,10 +6,11 @@ export type User = {
 };
 
 export type DbActivity = {
-  activities: Feeding[] | UserEvent[];
+  activities: ActivityTypes[];
   Date: string;
   UserUUID: string;
 };
+export type ActivityTypes = UserEvent | Feeding;
 
 export type UserEvent = {
   type: string | null | undefined;

@@ -1,32 +1,27 @@
-<form [formGroup]="actionForm" (ngSubmit)="onSubmit()" class="form">
-  <label for="Mother">Mother:</label>
-  <input
-    matInput
-    id="Mother"
-    type="text"
-    formControlName="Mother"
-    required
-    [readonly]="true"
-  />
-  <label for="Father">Father:</label>
-  <input
-    matInput
-    id="Father"
-    type="text"
-    formControlName="Father"
-    required
-    [readonly]="true"
-  />
-  <label for="Action">Action:</label>
+<form [formGroup]="activityForm" (ngSubmit)="onSubmit()" class="form">
+  <label for="Type">Type:</label>
   <mat-select
-    name="Action"
-    id="Action"
+    name="Type"
+    id="Type"
     matNativeControl
     required
-    formControlName="Action"
+    formControlName="Type"
     color="warn"
   >
     <mat-option value="Feeding">Feeding</mat-option>
+    <mat-option value="Poop">Poop</mat-option>
+    <mat-option value="Other">Other</mat-option>
+  </mat-select>
+  <label for="Type">Icon:</label>
+  <mat-select
+    name="Icon"
+    id="Icon"
+    matNativeControl
+    required
+    formControlName="Icon"
+    color="warn"
+  >
+    <mat-option value="Breastfeeding">Breastfeeding</mat-option>
     <mat-option value="Poop">Poop</mat-option>
     <mat-option value="Other">Other</mat-option>
   </mat-select>
@@ -46,7 +41,7 @@
     formControlName="Quantity"
     required
   />
-  <div *ngIf="this.actionForm.invalid" class="alert alert-danger">
+  <div *ngIf="this.activityForm.invalid" class="alert alert-danger">
     <div>Form is incomplete, complete form to submit!</div>
   </div>
   <button mat-raised-button color="primary" (onClick)="onSubmit()">

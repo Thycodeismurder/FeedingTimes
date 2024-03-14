@@ -111,21 +111,21 @@ public class Functions
     }
 
     public class ActivityData {
-        public string? Time {get; set;}
-        public string? Quantity {get; set;}
-        public string? Type {get; set;}
-        public string? Icon {get; set;}
+        public string? time {get; set;}
+        public string? quantity {get; set;}
+        public string? type {get; set;}
+        public string? icon {get; set;}
     }
     public async Task<APIGatewayProxyResponse> PostFeeding(APIGatewayProxyRequest request, ILambdaContext context)
     {
         context.Logger.LogInformation("Get Request\n");
         var requestBody = JsonSerializer.Deserialize<ActivityData>(request.Body.ToString());
-        context.Logger.LogInformation("time:" + requestBody?.Time + " quantity:" + requestBody?.Quantity + "Type:"+ requestBody?.Type+ "Icon:"+ requestBody?.Icon);
-        if (requestBody != null && requestBody.Icon != null && requestBody.Time != null && requestBody.Quantity != null && requestBody.Type != null) {
+        context.Logger.LogInformation("time:" + requestBody?.time + " quantity:" + requestBody?.quantity + "Type:"+ requestBody?.type+ "Icon:"+ requestBody?.icon);
+        if (requestBody != null && requestBody.icon != null && requestBody.time != null && requestBody.quantity != null && requestBody.type != null) {
         var response = new APIGatewayProxyResponse
         {
             StatusCode = (int)HttpStatusCode.OK,
-            Body = await PostFeedingAsync(requestBody.Type, requestBody.Time, requestBody.Quantity, requestBody.Icon),
+            Body = await PostFeedingAsync(requestBody.type, requestBody.time, requestBody.quantity, requestBody.icon),
             Headers = getHeaders()
         };
         return response;
