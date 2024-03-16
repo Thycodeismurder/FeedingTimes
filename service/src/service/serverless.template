@@ -119,7 +119,8 @@
               {
                 "Effect": "Allow",
                 "Action": [
-                  "dynamodb:Update*"
+                  "dynamodb:Update*",
+                  "dynamodb:PutItem*"
                 ],
                 "Resource": "*"
               },

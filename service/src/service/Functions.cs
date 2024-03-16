@@ -55,26 +55,40 @@ public class Functions
         }
         return document[0].ToJsonPretty();
     }
-    private async Task<string> PostFeedingAsync(string type, string time, string quantity, string icon)
+    private async Task<string> PostFeedingAsync(string type, string time, string quantity, string icon, string date)
     {
         using var client = new AmazonDynamoDBClient(Amazon.RegionEndpoint.EUWest1);
-        var response = await client.UpdateItemAsync(new UpdateItemRequest
+        try
         {
-            TableName = "CalendarData",
-            Key = new Dictionary<string, AttributeValue> { { "UserUUID", new AttributeValue { S = "aa1c6070-f8d9-4739-88db-dc1b5cff1efe" } }, { "Date", new AttributeValue { S = "2023-11-13" } } },
-            UpdateExpression = "SET #list = list_append(#list, :vals)",
-            ExpressionAttributeNames = new Dictionary<string, string>() { { "#list", "activities" } },
-            ExpressionAttributeValues = new Dictionary<string, AttributeValue> {
-                {":vals",
-                new AttributeValue {L = new List<AttributeValue>() {new AttributeValue {M = new Dictionary<string, AttributeValue> {{"quantity", new AttributeValue {S = quantity}}, {"icon", new AttributeValue {S = icon}},
-                    {"time", new AttributeValue { S= time}}, {"type", new AttributeValue { S= type}}}}}}
-                    
+            var response = await client.UpdateItemAsync(new UpdateItemRequest
+            {
+                TableName = "CalendarData",
+                Key = new Dictionary<string, AttributeValue> { { "UserUUID", new AttributeValue { S = "aa1c6070-f8d9-4739-88db-dc1b5cff1efe" } }, { "Date", new AttributeValue { S = date } } },
+                UpdateExpression = "SET #list = list_append(#list, :vals)",
+                ExpressionAttributeNames = { { "#list", "activities" } },
+                ExpressionAttributeValues = new Dictionary<string, AttributeValue> {
+                    {":vals",
+                    new AttributeValue {L = new List<AttributeValue>() {new AttributeValue {M = new Dictionary<string, AttributeValue> {{"quantity", new AttributeValue {S = quantity}}, {"icon", new AttributeValue {S = icon}},
+                        {"time", new AttributeValue { S= time}}, {"type", new AttributeValue { S= type}}}}}}
+                    }
+                },
+                ReturnValues = "ALL_NEW"
+            });
+            Document document = Document.FromAttributeMap(response.Attributes);
+            return document.ToJsonPretty();
+        }
+        catch (System.Exception)
+        {
+            var response = await client.PutItemAsync(
+                new PutItemRequest {
+                    TableName = "CalendarData",
+                    Item = {{"UserUUID", new AttributeValue { S = "aa1c6070-f8d9-4739-88db-dc1b5cff1efe"}}, {"Date", new AttributeValue {S = date}}, {"activities", new AttributeValue {L = new List<AttributeValue>() {new AttributeValue {M = new Dictionary<string, AttributeValue> {{"quantity", new AttributeValue {S = quantity}}, {"icon", new AttributeValue {S = icon}},
+                        {"time", new AttributeValue { S= time}}, {"type", new AttributeValue { S= type}}}}}}}}
                 }
-            },
-            ReturnValues = "ALL_NEW"
-        });
-        Document document = Document.FromAttributeMap(response.Attributes);
-        return document.ToJsonPretty();
+            );
+            Document document = Document.FromAttributeMap(response.Attributes);
+            return document.ToJsonPretty();
+        }
     }
 
 
@@ -122,10 +136,13 @@ public class Functions
         var requestBody = JsonSerializer.Deserialize<ActivityData>(request.Body.ToString());
         context.Logger.LogInformation("time:" + requestBody?.time + " quantity:" + requestBody?.quantity + "Type:"+ requestBody?.type+ "Icon:"+ requestBody?.icon);
         if (requestBody != null && requestBody.icon != null && requestBody.time != null && requestBody.quantity != null && requestBody.type != null) {
+        DateTime dateTime;
+        DateTime.TryParseExact(requestBody.time, "yyyy-MM-ddTHH:mm", null, System.Globalization.DateTimeStyles.None, out dateTime);
+        context.Logger.LogInformation("dateTime:"+dateTime.ToString());
         var response = new APIGatewayProxyResponse
         {
             StatusCode = (int)HttpStatusCode.OK,
-            Body = await PostFeedingAsync(requestBody.type, requestBody.time, requestBody.quantity, requestBody.icon),
+            Body = await PostFeedingAsync(requestBody.type, requestBody.time, requestBody.quantity, requestBody.icon, dateTime.Date.ToString("d")),
             Headers = getHeaders()
         };
         return response;
