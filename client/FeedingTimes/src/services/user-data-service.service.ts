@@ -37,8 +37,8 @@ export class UserDataServiceService {
   }
   getActivities(): Activity[] | undefined {
     if (this.DbActivities) {
-      let activities : Activity[] | undefined;
-      this.DbActivities.forEach((DbActivity) => {activities = DbActivity? DbActivity.activities.map((activity) => this.transformEventData.transform(activity) ) : [{type: '', info: '', time: '', iconPath: ''}]} ) 
+      let activities : Activity[] = [];
+      this.DbActivities.forEach((DbActivity) => {activities = activities.concat(DbActivity? DbActivity.activities.map((activity) => this.transformEventData.transform(activity) ) : [{type: '', info: '', time: '', iconPath: ''}])} ) 
       return activities;
     }
     else return [{type: '', info: '', time: '', iconPath: ''}]

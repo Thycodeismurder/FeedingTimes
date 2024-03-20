@@ -1,1 +1,6 @@
-<p>week works!</p>
+<div class="week">
+    <div class="week-date">{{this.activities?.[0]?.time | date : 'M, MMMM' }}</div>
+    <div class="week-activity" *ngFor="let activities of this.groupedActivities">
+        <app-day [activities]="activities"> </app-day>
+    </div>
+  </div>

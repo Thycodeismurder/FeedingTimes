@@ -12,6 +12,7 @@ import { Activity } from 'src/services/Activity';
 })
 export class DayComponent implements OnInit {
   @Input() activities: (Activity | null | undefined)[] | undefined;
+  @Input() showDate: boolean = true;
   constructor() {}
   ngOnInit(): void {
     if (this.activities) 
