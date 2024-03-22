@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { groupActivitiesByDay } from 'src/app/shared/functions/groupActivitiesByTime';
 import { Activity } from 'src/services/Activity';
 
 @Component({
@@ -18,19 +19,9 @@ export class WeekComponent implements OnInit {
         return +new Date(a!.time) - +new Date(b!.time);
       })
     }
-    function groupObjectsByDay(activities: Activity[]) {
-      return activities.reduce((acc: {[key: string]: Activity[]}, obj: Activity) => {
-        const dateString = new Date(obj.time).toDateString(); // Getting string representation of the date (without time)
-        if (!acc[dateString]) {
-          acc[dateString] = []; // Creating a new array for the day if it doesn't exist
-        }
-        acc[dateString].push(obj); // Pushing the object into the corresponding array
-        return acc;
-      }, {});
-    }
     
     // Grouping objects by the same day
-    this.groupedActivities = Object.values(groupObjectsByDay(this.activities!)).map(obj => obj);
+    this.groupedActivities = groupActivitiesByDay(this.activities!);
   }
 
 }
