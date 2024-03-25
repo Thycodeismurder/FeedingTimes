@@ -11,18 +11,20 @@ import { UserDataServiceService } from 'src/services/user-data-service.service';
 export class ActionFormViewComponent implements OnInit {
   @Input() user: User | undefined;
   parent: Parent | undefined;
+  isPostingActivity = false;
   constructor(private userService: UserDataServiceService) {}
 
   ngOnInit(): void {
     /* this.parent = { mother: this.user?.Mother, father: this.user?.Father }; */
   }
   SubmitUser(activity: ActivityTypes) {
+    this.isPostingActivity = true;
         this.userService
           .postActivity(
             activity
           )
-          .subscribe((data) => {
-            console.log(data);
+          .subscribe(() => {
+            this.isPostingActivity = false;
           });
   }
 }

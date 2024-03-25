@@ -17,6 +17,7 @@ import { ActivityTypes, DbActivity, Feeding, UserEvent } from 'src/services/User
 export class FormComponent implements OnInit {
   @Input() parent: Parent | undefined;
   @Output() formSubmitEvent = new EventEmitter<ActivityTypes>();
+  @Input() isPostingActivity = false;
   activity: ActivityTypes | undefined;
   activityForm = new FormGroup(
     {
@@ -33,8 +34,7 @@ export class FormComponent implements OnInit {
   ngOnInit(): void {}
   onSubmit() {
     if (this.activityForm.status == 'INVALID') {
-      console.log('hipheierror');
-      this.activityForm.hasError('check form');
+      this.activityForm.markAllAsTouched();
     } else  if (this.activityForm.status == 'VALID') {
       if(this.activityForm.value.Type === 'Feeding') {
         this.activity = {
@@ -60,7 +60,7 @@ export class FormComponent implements OnInit {
       }
       this.formSubmitEvent.emit(this.activity);
     } else {
-      this.activityForm.hasError;
+      this.activityForm.markAllAsTouched();
     }
   } 
 }

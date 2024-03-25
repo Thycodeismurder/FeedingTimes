@@ -42,9 +42,23 @@
     required
   />
   <div *ngIf="this.activityForm.invalid" class="alert alert-danger">
-    <div>Form is incomplete, complete form to submit!</div>
+    <div *ngIf="activityForm.controls.Type.invalid && activityForm.controls.Type.touched" class="alert alert-danger">
+      Type is required!
+    </div>
+
+    <div *ngIf="activityForm.controls.Icon.invalid && activityForm.controls.Icon.touched" class="alert alert-danger">
+      Icon is required!
+    </div>
+
+    <div *ngIf="activityForm.controls.Time.invalid && activityForm.controls.Time.touched" class="alert alert-danger">
+      Time is required!
+    </div>
+
+    <div *ngIf="activityForm.controls.Quantity.invalid && activityForm.controls.Quantity.touched" class="alert alert-danger">
+      Quantity is required!
+    </div>
   </div>
-  <button mat-raised-button color="primary" (onClick)="onSubmit()">
+  <button mat-raised-button color="primary" (onClick)="onSubmit()" [disabled]="isPostingActivity">
     submit event
   </button>
 </form>
