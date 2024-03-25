@@ -1,5 +1,6 @@
 <div class="day">
-  <div *ngIf="showDate" class="day-date">{{this.activities?.[0]?.time | date : 'dd' }}</div>
+  <div *ngIf="showDate && isCurrentDay" class="day-date-selected">{{this.activities?.[0]?.time | date : 'dd' }}</div>
+  <div *ngIf="showDate && !isCurrentDay" class="day-date-unselected">{{this.activities?.[0]?.time | date : 'dd' }}</div>
   <div class="day-activity" *ngFor="let activity of activities">
     <app-activity [activity]="activity!"></app-activity>
   </div>

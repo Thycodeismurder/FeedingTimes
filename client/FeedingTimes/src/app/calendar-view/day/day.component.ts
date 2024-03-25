@@ -13,6 +13,7 @@ import { Activity } from 'src/services/Activity';
 export class DayComponent implements OnInit {
   @Input() activities: (Activity | null | undefined)[] | undefined;
   @Input() showDate: boolean = true;
+  isCurrentDay: boolean = false;
   constructor() {}
   ngOnInit(): void {
     if (this.activities) 
@@ -21,5 +22,6 @@ export class DayComponent implements OnInit {
         return +new Date(a!.time) - +new Date(b!.time);
       })
     }
+    this.isCurrentDay = new Date().getDate() === new Date(this.activities?.[0]?.time!).getDate();
   }
 }
