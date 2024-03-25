@@ -1,0 +1,13 @@
+@import '../../../styles/styles.scss';
+.month {
+    display: grid;
+    width: 100%;
+    border: 1px solid $light-gray;
+    border-radius: 8px;
+}
+    .month-date {
+        text-align: center;
+    }
+    .month-activity {
+        padding: 10px;
+    }

@@ -9,6 +9,7 @@ import { Activity } from 'src/services/Activity';
 })
 export class WeekComponent implements OnInit {
   @Input() activities: Activity[] | undefined;
+  @Input() showMonth: boolean = true;
   groupedActivities:  Activity[][] | undefined;
   constructor() { }
 

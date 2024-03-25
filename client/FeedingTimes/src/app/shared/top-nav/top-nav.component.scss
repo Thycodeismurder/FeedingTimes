@@ -1,5 +1,6 @@
 @import '../../../styles/styles.scss';
 .top-nav-bar {
+    z-index: 1000;
     position: fixed;
     width: 100%;
     top: 0;
