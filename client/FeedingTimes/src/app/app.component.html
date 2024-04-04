@@ -2,7 +2,8 @@
 <div class="content">
   <ng-container *ngIf="loading; else notLoading">
     <div class="content-loading">
-      <mat-spinner></mat-spinner>
+      <mat-spinner [color]="'warn'"></mat-spinner>
+      loading
     </div>
   </ng-container>
   <ng-template #notLoading>

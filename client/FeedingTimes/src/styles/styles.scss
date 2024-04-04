@@ -12,7 +12,7 @@ body {
 }
 .mat-progress-spinner circle,
 .mat-spinner circle {
-  stroke: $main-background-color;
+  stroke: $main-background-color !important;
 }
 .alert {
   padding: 10px;

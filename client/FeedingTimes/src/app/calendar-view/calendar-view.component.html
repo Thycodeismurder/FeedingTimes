@@ -1,12 +1,19 @@
-<div>
-  day
-  <app-day [activities]="this.activities"> </app-day>
-</div>
-<div>
-  week
-  <app-week [activities]="this.activities"></app-week>
-</div>
-<div>
-  month
-  <app-month [activities]="this.activities"></app-month>
+<div class="calendar-view">
+  <div class="calendar-view-datepicker">
+    <app-date-picker></app-date-picker>
+  </div>
+  <div class="calendar-view-content">
+    <div>
+      day
+      <app-day [activities]="this.activities"> </app-day>
+    </div>
+    <div>
+      week
+      <app-week [activities]="this.activities"></app-week>
+    </div>
+    <div>
+      month
+      <app-month [activities]="this.activities"></app-month>
+    </div>
+  </div>
 </div>
