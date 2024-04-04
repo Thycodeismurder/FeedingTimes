@@ -1,6 +1,8 @@
 <div class="week">
-    <div *ngIf="showMonth" class="week-date">{{this.activities?.[0]?.time | date : 'M, MMMM' }}</div>
-    <div class="week-activity" *ngFor="let activities of this.groupedActivities">
-        <app-day [activities]="activities"> </app-day>
-    </div>
+  <div *ngIf="showMonth" class="week-date">
+    {{this.activities?.[0]?.time | date : 'M, MMMM' }}
   </div>
+  <div class="week-activity" *ngFor="let activities of this.groupedActivities">
+    <app-day [activities]="activities"> </app-day>
+  </div>
+</div>

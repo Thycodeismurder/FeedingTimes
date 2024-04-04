@@ -1,13 +1,13 @@
-@import '../../../styles/styles.scss';
+@import "../../../styles/styles.scss";
 .week {
-    display: grid;
-    width: 100%;
-    border: 1px solid $light-gray;
-    border-radius: 8px;
+  display: grid;
+  width: 100%;
+  border: 1px solid $light-gray;
+  border-radius: 8px;
 }
-    .week-date {
-        text-align: center;
-    }
-    .week-activity {
-        padding: 10px;
-    }
+.week-date {
+  text-align: center;
+}
+.week-activity {
+  padding: 10px;
+}

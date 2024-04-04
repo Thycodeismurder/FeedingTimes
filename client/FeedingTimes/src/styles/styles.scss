@@ -1,18 +1,25 @@
 /* You can add global styles to this file, and also import other style files */
-@import './theme.scss';
-@import './0-base/base-dir';
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-.mat-progress-spinner circle, .mat-spinner circle {
-    stroke: $main-background-color;
+@import "./theme.scss";
+@import "./0-base/base-dir";
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+.mat-progress-spinner circle,
+.mat-spinner circle {
+  stroke: $main-background-color;
 }
 .alert {
-    padding: 10px;
-    border-radius: 4px;
-    font-weight: bold;
+  padding: 10px;
+  border-radius: 4px;
+  font-weight: bold;
 }
 
 .alert-danger {
-    background-color: $red;
-    color: $white;
+  background-color: $red;
+  color: $white;
 }

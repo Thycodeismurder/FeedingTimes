@@ -1,24 +1,24 @@
-@import '../../../styles/styles.scss';
+@import "../../../styles/styles.scss";
 .day {
-    display: grid;
-    width: 100%;
-    border: 1px solid $light-gray;
-    border-radius: 8px;
+  display: grid;
+  width: 100%;
+  border: 1px solid $light-gray;
+  border-radius: 8px;
 }
-    .day-date-selected {
-        text-align: center;
-        border: 3px solid $red;
-        border-radius: 8px;
-        margin: auto;
-        margin-top: 2px;
-        padding: 2px;
-    }
-    .day-date-unselected {
-        text-align: center;
-        margin: auto;
-        margin-top: 2px;
-        padding: 2px;
-    }
-    .day-activity {
-        padding: 10px;
-    }
+.day-date-selected {
+  text-align: center;
+  border: 3px solid $red;
+  border-radius: 8px;
+  margin: auto;
+  margin-top: 2px;
+  padding: 2px;
+}
+.day-date-unselected {
+  text-align: center;
+  margin: auto;
+  margin-top: 2px;
+  padding: 2px;
+}
+.day-activity {
+  padding: 10px;
+}

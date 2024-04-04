@@ -1,12 +1,12 @@
 <div class="activity">
   <img class="activity-svg" [src]="this.activity?.iconPath" />
   <div>
-    {{activity?.type}}
-  </div>
-  <div> 
-    {{activity?.info}}
+    {{ activity?.type }}
   </div>
   <div>
-    {{activity?.time | date: 'medium'}}
+    {{ activity?.info }}
+  </div>
+  <div>
+    {{ activity?.time | date : "medium" }}
   </div>
 </div>

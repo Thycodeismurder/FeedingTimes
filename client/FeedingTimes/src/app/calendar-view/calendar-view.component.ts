@@ -14,7 +14,7 @@ import { Activity } from 'src/services/Activity';
 })
 export class CalendarViewComponent implements OnInit, OnChanges {
   @Input() users: User[] | undefined;
-  @Input() activities : Activity[] | undefined;
+  @Input() activities: Activity[] | undefined;
   activity: Activity | undefined | null;
   constructor() {}
 

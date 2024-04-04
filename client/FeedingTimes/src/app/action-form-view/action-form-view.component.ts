@@ -19,12 +19,8 @@ export class ActionFormViewComponent implements OnInit {
   }
   SubmitUser(activity: ActivityTypes) {
     this.isPostingActivity = true;
-        this.userService
-          .postActivity(
-            activity
-          )
-          .subscribe(() => {
-            this.isPostingActivity = false;
-          });
+    this.userService.postActivity(activity).subscribe(() => {
+      this.isPostingActivity = false;
+    });
   }
 }

@@ -1,4 +1,4 @@
-import { Component,  OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { User } from 'src/services/User';
 import { Activity } from 'src/services/Activity';
 import { UserDataServiceService } from 'src/services/user-data-service.service';
@@ -17,11 +17,11 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.userService.getUserData().subscribe(() => {
-      this.user = this.userService.getUser()
+      this.user = this.userService.getUser();
       this.userService.getActivitiesData().subscribe(() => {
         this.loading = false;
         this.activities = this.userService.getActivities();
-      })
+      });
     });
   }
   onOutletLoaded(component: any) {

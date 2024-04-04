@@ -1,8 +1,4 @@
-import {
-  Component,
-  Input,
-  OnInit,
-} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Activity } from 'src/services/Activity';
 
 @Component({
@@ -16,12 +12,12 @@ export class DayComponent implements OnInit {
   isCurrentDay: boolean = false;
   constructor() {}
   ngOnInit(): void {
-    if (this.activities) 
-      {
-        this.activities = this.activities?.sort((a, b) => {
+    if (this.activities) {
+      this.activities = this.activities?.sort((a, b) => {
         return +new Date(a!.time) - +new Date(b!.time);
-      })
+      });
     }
-    this.isCurrentDay = new Date().getDate() === new Date(this.activities?.[0]?.time!).getDate();
+    this.isCurrentDay =
+      new Date().getDate() === new Date(this.activities?.[0]?.time!).getDate();
   }
 }

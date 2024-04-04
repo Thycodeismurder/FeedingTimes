@@ -1,13 +1,7 @@
-import {
-  Component,
-  Input,
-  OnInit,
-  Output,
-  EventEmitter,
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Parent } from 'src/services/Parent';
-import { ActivityTypes, DbActivity, Feeding, UserEvent } from 'src/services/User';
+import { ActivityTypes } from 'src/services/User';
 
 @Component({
   selector: 'app-form',
@@ -35,32 +29,32 @@ export class FormComponent implements OnInit {
   onSubmit() {
     if (this.activityForm.status == 'INVALID') {
       this.activityForm.markAllAsTouched();
-    } else  if (this.activityForm.status == 'VALID') {
-      if(this.activityForm.value.Type === 'Feeding') {
+    } else if (this.activityForm.status == 'VALID') {
+      if (this.activityForm.value.Type === 'Feeding') {
         this.activity = {
-          type : this.activityForm.value.Type,
+          type: this.activityForm.value.Type,
           icon: this.activityForm.value.Icon,
           quantity: this.activityForm.value.Quantity,
-          time: this.activityForm.value.Time
-        }
-      }else if (this.activityForm.value.Type === 'Poop') {
+          time: this.activityForm.value.Time,
+        };
+      } else if (this.activityForm.value.Type === 'Poop') {
         this.activity = {
-          type : this.activityForm.value.Type,
+          type: this.activityForm.value.Type,
           icon: this.activityForm.value.Icon,
           description: this.activityForm.value.Quantity,
-          time: this.activityForm.value.Time
-        }
+          time: this.activityForm.value.Time,
+        };
       } else {
         this.activity = {
-          type : this.activityForm.value.Type,
+          type: this.activityForm.value.Type,
           icon: this.activityForm.value.Icon,
           description: this.activityForm.value.Quantity,
-          time: this.activityForm.value.Time
-        }
+          time: this.activityForm.value.Time,
+        };
       }
       this.formSubmitEvent.emit(this.activity);
     } else {
       this.activityForm.markAllAsTouched();
     }
-  } 
+  }
 }

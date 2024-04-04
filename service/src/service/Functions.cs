@@ -80,7 +80,8 @@ public class Functions
         catch (System.Exception)
         {
             var response = await client.PutItemAsync(
-                new PutItemRequest {
+                new PutItemRequest
+                {
                     TableName = "CalendarData",
                     Item = {{"UserUUID", new AttributeValue { S = "aa1c6070-f8d9-4739-88db-dc1b5cff1efe"}}, {"Date", new AttributeValue {S = date}}, {"activities", new AttributeValue {L = new List<AttributeValue>() {new AttributeValue {M = new Dictionary<string, AttributeValue> {{"quantity", new AttributeValue {S = quantity}}, {"icon", new AttributeValue {S = icon}},
                         {"time", new AttributeValue { S= time}}, {"type", new AttributeValue { S= type}}}}}}}}
@@ -124,30 +125,35 @@ public class Functions
         return response;
     }
 
-    public class ActivityData {
-        public string? time {get; set;}
-        public string? quantity {get; set;}
-        public string? type {get; set;}
-        public string? icon {get; set;}
+    public class ActivityData
+    {
+        public string? time { get; set; }
+        public string? quantity { get; set; }
+        public string? type { get; set; }
+        public string? icon { get; set; }
     }
     public async Task<APIGatewayProxyResponse> PostFeeding(APIGatewayProxyRequest request, ILambdaContext context)
     {
         context.Logger.LogInformation("Get Request\n");
         var requestBody = JsonSerializer.Deserialize<ActivityData>(request.Body.ToString());
-        context.Logger.LogInformation("time:" + requestBody?.time + " quantity:" + requestBody?.quantity + "Type:"+ requestBody?.type+ "Icon:"+ requestBody?.icon);
-        if (requestBody != null && requestBody.icon != null && requestBody.time != null && requestBody.quantity != null && requestBody.type != null) {
-        DateTime dateTime;
-        DateTime.TryParseExact(requestBody.time, "yyyy-MM-ddTHH:mm", null, System.Globalization.DateTimeStyles.None, out dateTime);
-        context.Logger.LogInformation("dateTime:"+dateTime.ToString());
-        var response = new APIGatewayProxyResponse
+        context.Logger.LogInformation("time:" + requestBody?.time + " quantity:" + requestBody?.quantity + "Type:" + requestBody?.type + "Icon:" + requestBody?.icon);
+        if (requestBody != null && requestBody.icon != null && requestBody.time != null && requestBody.quantity != null && requestBody.type != null)
         {
-            StatusCode = (int)HttpStatusCode.OK,
-            Body = await PostFeedingAsync(requestBody.type, requestBody.time, requestBody.quantity, requestBody.icon, dateTime.Date.ToString("d")),
-            Headers = getHeaders()
-        };
-        return response;
-        } else {
-            var response = new APIGatewayProxyResponse {
+            DateTime dateTime;
+            DateTime.TryParseExact(requestBody.time, "yyyy-MM-ddTHH:mm", null, System.Globalization.DateTimeStyles.None, out dateTime);
+            context.Logger.LogInformation("dateTime:" + dateTime.ToString());
+            var response = new APIGatewayProxyResponse
+            {
+                StatusCode = (int)HttpStatusCode.OK,
+                Body = await PostFeedingAsync(requestBody.type, requestBody.time, requestBody.quantity, requestBody.icon, dateTime.Date.ToString("d")),
+                Headers = getHeaders()
+            };
+            return response;
+        }
+        else
+        {
+            var response = new APIGatewayProxyResponse
+            {
                 StatusCode = (int)HttpStatusCode.BadRequest,
                 Body = "Body of request not found!",
                 Headers = getHeaders()

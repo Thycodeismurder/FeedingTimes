@@ -16,50 +16,78 @@ httpOptions.headers.append('Content-Type', 'text/plain');
 })
 export class UserDataServiceService {
   transformEventData: TransformEventDataPipe;
-  user : User | undefined;
-  DbActivities : DbActivity[] |undefined;
+  user: User | undefined;
+  DbActivities: DbActivity[] | undefined;
   constructor(private httpClient: HttpClient) {
     this.transformEventData = new TransformEventDataPipe();
   }
 
   getUserData(): Observable<User> {
-    const response = this.httpClient.get<User>(apiEndPoint + 'feedingtimes/user');
-    response.subscribe((data) => { this.user = data});
+    const response = this.httpClient.get<User>(
+      apiEndPoint + 'feedingtimes/user'
+    );
+    response.subscribe((data) => {
+      this.user = data;
+    });
     return response;
   }
   getUser(): User | undefined {
-    return this.user
+    return this.user;
   }
   getActivitiesData(): Observable<DbActivity[]> {
-    const response = this.httpClient.get<DbActivity[]>(apiEndPoint+'feedingtimes/calendardata')
-    response.subscribe((data) => {this.DbActivities = data})
-    return response
+    const response = this.httpClient.get<DbActivity[]>(
+      apiEndPoint + 'feedingtimes/calendardata'
+    );
+    response.subscribe((data) => {
+      this.DbActivities = data;
+    });
+    return response;
   }
   getActivities(): Activity[] | undefined {
     if (this.DbActivities) {
-      let activities : Activity[] = [];
-      this.DbActivities.forEach((DbActivity) => {activities = activities.concat(DbActivity? DbActivity.activities.map((activity) => this.transformEventData.transform(activity) ) : [{type: '', info: '', time: '', iconPath: ''}])} ) 
+      let activities: Activity[] = [];
+      this.DbActivities.forEach((DbActivity) => {
+        activities = activities.concat(
+          DbActivity
+            ? DbActivity.activities.map((activity) =>
+                this.transformEventData.transform(activity)
+              )
+            : [{ type: '', info: '', time: '', iconPath: '' }]
+        );
+      });
       return activities;
-    }
-    else return [{type: '', info: '', time: '', iconPath: ''}]
+    } else return [{ type: '', info: '', time: '', iconPath: '' }];
   }
   postActivity(activity: ActivityTypes): Observable<{}> {
-    if(activity.type === 'Feeding' && 'quantity' in activity) {
+    if (activity.type === 'Feeding' && 'quantity' in activity) {
       const response = this.httpClient.post(
-        apiEndPoint +
-          'feedingtimes/postactivity', JSON.stringify(activity, (key, value) => {if (typeof value === 'number') {return String(value)} return value})
+        apiEndPoint + 'feedingtimes/postactivity',
+        JSON.stringify(activity, (key, value) => {
+          if (typeof value === 'number') {
+            return String(value);
+          }
+          return value;
+        })
       );
       return response;
-    } else if(activity.type === 'Poop' && 'description' in activity || activity.type === 'Other' && 'description' in activity) {
+    } else if (
+      (activity.type === 'Poop' && 'description' in activity) ||
+      (activity.type === 'Other' && 'description' in activity)
+    ) {
       const response = this.httpClient.post(
-        apiEndPoint +
-          'feedingtimes/postactivity', JSON.stringify(activity, (key, value) => {if (typeof value === 'number') {return String(value)} return value})
+        apiEndPoint + 'feedingtimes/postactivity',
+        JSON.stringify(activity, (key, value) => {
+          if (typeof value === 'number') {
+            return String(value);
+          }
+          return value;
+        })
       );
       return response;
     } else {
-      const response = new Observable<{}>((subscriber)=> {
-        subscriber.error('not supported format')
-      })
+      const response = new Observable<{}>((subscriber) => {
+        subscriber.error('not supported format');
+      });
       return response;
     }
   }

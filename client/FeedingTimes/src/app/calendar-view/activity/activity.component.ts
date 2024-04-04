@@ -8,9 +8,7 @@ import { Activity } from 'src/services/Activity';
 })
 export class ActivityComponent implements OnInit {
   @Input() activity: Activity | undefined | null;
-  constructor() {
-  }
+  constructor() {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 }

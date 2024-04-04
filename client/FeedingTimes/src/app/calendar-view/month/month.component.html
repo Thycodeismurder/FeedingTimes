@@ -1,6 +1,8 @@
 <div class="month">
-    <div class="month-date">{{this.activities?.[0]?.time | date : 'M, MMMM' }}</div>
-    <div class="month-activity" *ngFor="let activities of this.groupedActivities">
-        <app-week [showMonth]="false" [activities]="activities"> </app-week>
-    </div>
+  <div class="month-date">
+    {{this.activities?.[0]?.time | date : 'M, MMMM' }}
   </div>
+  <div class="month-activity" *ngFor="let activities of this.groupedActivities">
+    <app-week [showMonth]="false" [activities]="activities"> </app-week>
+  </div>
+</div>

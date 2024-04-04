@@ -1,8 +1,8 @@
 export type User = {
   UserUUID: string | null | undefined;
   Parents: {
-    [key: string]: string
-  }
+    [key: string]: string;
+  };
 };
 
 export type DbActivity = {

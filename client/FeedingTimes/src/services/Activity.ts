@@ -1,6 +1,6 @@
 export type Activity = {
   type: string;
   info: string;
-  time:string;
+  time: string;
   iconPath: string;
 };
