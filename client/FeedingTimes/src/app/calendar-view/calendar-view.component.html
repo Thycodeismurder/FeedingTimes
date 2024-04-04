@@ -1,6 +1,6 @@
 <div class="calendar-view">
   <div class="calendar-view-datepicker">
-    <app-date-picker></app-date-picker>
+    <app-date-picker (dateChange)="dateChanged($event)"></app-date-picker>
   </div>
   <div class="calendar-view-content">
     <div>

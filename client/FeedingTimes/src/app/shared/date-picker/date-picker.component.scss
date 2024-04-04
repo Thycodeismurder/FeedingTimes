@@ -1,1 +1,7 @@
 @import "../../../styles/styles.scss";
+.date-picker {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 117px;
+}

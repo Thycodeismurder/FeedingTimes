@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
     this.userService.getUserData().subscribe(() => {
       this.user = this.userService.getUser();
       this.userService.getActivitiesData().subscribe(() => {
-        /* this.loading = false; */
+        this.loading = false;
         this.activities = this.userService.getActivities();
       });
     });

@@ -26,4 +26,7 @@ export class CalendarViewComponent implements OnInit, OnChanges {
       this.activity = this.activities?.[0];
     }
   }
+  dateChanged(date: Date) {
+    console.log(date);
+  }
 }
