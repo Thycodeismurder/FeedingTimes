@@ -27,6 +27,7 @@ import { ActivityComponent } from './calendar-view/activity/activity.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TransformEventDataPipe } from './pipes/transform-event-data.pipe';
 import { TransformIconsPipe } from './pipes/transform-icons.pipe';
+import { DatePickerComponent } from './shared/date-picker/date-picker.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -42,6 +43,7 @@ import { TransformIconsPipe } from './pipes/transform-icons.pipe';
     ActivityComponent,
     TransformEventDataPipe,
     TransformIconsPipe,
+    DatePickerComponent,
   ],
   imports: [
     BrowserModule,
