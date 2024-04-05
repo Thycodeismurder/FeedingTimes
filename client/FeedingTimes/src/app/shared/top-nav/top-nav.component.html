@@ -16,21 +16,21 @@
     </div>
     <div class="top-nav-bar-left-content-calendar">
       <button routerLink="calendar" mat-button aria-label="calendar page">
-        Calendar
+        <div class="top-nav-bar-left-content-calendar-text">Calendar</div>
       </button>
     </div>
     <div class="top-nav-bar-left-content-action">
       <button routerLink="action-form" mat-button aria-label="action-form page">
-        Report event
+        <div class="top-nav-bar-left-content-action-text">Report event</div>
       </button>
     </div>
   </div>
   <div class="top-nav-bar-right-content">
     <div class="top-nav-bar-left-content-mother">
-      <h1>Mother: {{ this.user?.Parents?.['Mother'] }}</h1>
+      <h2>Mother: {{ this.user?.Parents?.['Mother'] }}</h2>
     </div>
     <div class="top-nav-bar-left-content-father">
-      <h1>Father: {{ this.user?.Parents?.['Father'] }}</h1>
+      <h2>Father: {{ this.user?.Parents?.['Father'] }}</h2>
     </div>
   </div>
 </div>

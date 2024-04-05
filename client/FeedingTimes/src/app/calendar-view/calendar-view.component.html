@@ -3,9 +3,9 @@
     <app-date-picker (dateChange)="dateChanged($event)"></app-date-picker>
   </div>
   <div class="calendar-view-content">
-    <div>
-      month
-      <app-month [activities]="this.filteredActivities"></app-month>
+    <div class="calendar-view-content-text">
+      {{ displayedMonth | date : "MMMM" }}
     </div>
+    <app-month [activities]="this.filteredActivities"></app-month>
   </div>
 </div>

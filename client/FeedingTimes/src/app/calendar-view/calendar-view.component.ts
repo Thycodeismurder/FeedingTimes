@@ -16,6 +16,7 @@ import { filterActivitiesByTime } from '../shared/functions/filterActivitiesByTi
 export class CalendarViewComponent implements OnInit, OnChanges {
   @Input() users: User[] | undefined;
   @Input() activities: Activity[] | undefined;
+  displayedMonth: Date = new Date();
   filteredActivities: Activity[] | undefined;
   activity: Activity | undefined | null;
   constructor() {}
@@ -30,5 +31,6 @@ export class CalendarViewComponent implements OnInit, OnChanges {
   }
   dateChanged(date: Date) {
     this.filteredActivities = filterActivitiesByTime(this.activities!, [date]);
+    this.displayedMonth = date;
   }
 }
