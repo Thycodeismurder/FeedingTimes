@@ -4,16 +4,8 @@
   </div>
   <div class="calendar-view-content">
     <div>
-      day
-      <app-day [activities]="this.activities"> </app-day>
-    </div>
-    <div>
-      week
-      <app-week [activities]="this.activities"></app-week>
-    </div>
-    <div>
       month
-      <app-month [activities]="this.activities"></app-month>
+      <app-month [activities]="this.filteredActivities"></app-month>
     </div>
   </div>
 </div>

@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { User } from 'src/services/User';
 import { Activity } from 'src/services/Activity';
+import { filterActivitiesByTime } from '../shared/functions/filterActivitiesByTime';
 @Component({
   selector: 'app-calendar-view',
   templateUrl: './calendar-view.component.html',
@@ -15,6 +16,7 @@ import { Activity } from 'src/services/Activity';
 export class CalendarViewComponent implements OnInit, OnChanges {
   @Input() users: User[] | undefined;
   @Input() activities: Activity[] | undefined;
+  filteredActivities: Activity[] | undefined;
   activity: Activity | undefined | null;
   constructor() {}
 
@@ -27,6 +29,6 @@ export class CalendarViewComponent implements OnInit, OnChanges {
     }
   }
   dateChanged(date: Date) {
-    console.log(date);
+    this.filteredActivities = filterActivitiesByTime(this.activities!, [date]);
   }
 }

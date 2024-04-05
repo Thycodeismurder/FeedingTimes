@@ -23,6 +23,7 @@ export class DatePickerComponent implements OnInit {
       this.date.setValue(
         new Date(this.date.value.setMonth(this.date.value.getMonth() + 1))
       );
+      this.dateChanged();
     }
   }
   previousMonth() {
@@ -30,8 +31,10 @@ export class DatePickerComponent implements OnInit {
       this.date.setValue(
         new Date(this.date.value.setMonth(this.date.value.getMonth() - 1))
       );
+    this.dateChanged();
   }
   setToday() {
     this.date.setValue(new Date());
+    this.dateChanged();
   }
 }
