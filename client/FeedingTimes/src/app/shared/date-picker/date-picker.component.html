@@ -13,7 +13,7 @@
     class="date-picker-today"
     (change)="selectDaterange($event.value)"
   >
-    <mat-button-toggle value="day">Day</mat-button-toggle>
+    <mat-button-toggle value="day" [checked]="true">Day</mat-button-toggle>
     <mat-button-toggle value="week">Week</mat-button-toggle>
     <mat-button-toggle value="month">Month</mat-button-toggle>
   </mat-button-toggle-group>
