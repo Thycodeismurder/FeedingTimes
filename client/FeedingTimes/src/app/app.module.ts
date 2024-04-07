@@ -28,6 +28,7 @@ import { MatProgressSpinnerModule as MatProgressSpinnerModule } from '@angular/m
 import { TransformEventDataPipe } from './pipes/transform-event-data.pipe';
 import { TransformIconsPipe } from './pipes/transform-icons.pipe';
 import { DatePickerComponent } from './shared/date-picker/date-picker.component';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 @NgModule({
   declarations: [
     AppComponent,
@@ -60,6 +61,7 @@ import { DatePickerComponent } from './shared/date-picker/date-picker.component'
     MatInputModule,
     MatSelectModule,
     MatProgressSpinnerModule,
+    MatButtonToggleModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

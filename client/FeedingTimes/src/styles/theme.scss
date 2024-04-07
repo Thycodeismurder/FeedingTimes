@@ -39,4 +39,5 @@ $light-theme: mat.define-light-theme(
   @include mat.core-color($light-theme);
   @include mat.button-color($light-theme);
   @include mat.progress-spinner-color($light-theme);
+  @include mat.datepicker-color($light-theme);
 }

@@ -4,3 +4,5 @@ export type Activity = {
   time: string;
   iconPath: string;
 };
+
+export type DateRange = 'day' | 'month' | 'week';

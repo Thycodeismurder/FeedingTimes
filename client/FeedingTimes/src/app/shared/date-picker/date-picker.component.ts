@@ -1,5 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { DateRange } from 'src/services/Activity';
 
 @Component({
   selector: 'app-date-picker',
@@ -8,7 +9,9 @@ import { FormControl } from '@angular/forms';
 })
 export class DatePickerComponent implements OnInit {
   @Output() dateChange = new EventEmitter<Date>();
+  @Output() daterangeChange = new EventEmitter<DateRange>();
   date = new FormControl(new Date());
+  selectedDaterange: DateRange = 'day';
 
   constructor() {}
 
@@ -17,6 +20,11 @@ export class DatePickerComponent implements OnInit {
   }
   dateChanged() {
     if (this.date.value) this.dateChange.emit(this.date.value);
+  }
+  selectDaterange(daterange: DateRange) {
+    this.selectedDaterange = daterange;
+    this.daterangeChange.emit(daterange);
+    this.dateChanged();
   }
   nextMonth() {
     if (this.date.value) {

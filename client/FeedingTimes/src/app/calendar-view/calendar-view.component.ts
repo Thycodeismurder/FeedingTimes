@@ -6,7 +6,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { User } from 'src/services/User';
-import { Activity } from 'src/services/Activity';
+import { Activity, DateRange } from 'src/services/Activity';
 import { filterActivitiesByTime } from '../shared/functions/filterActivitiesByTime';
 @Component({
   selector: 'app-calendar-view',
@@ -19,6 +19,7 @@ export class CalendarViewComponent implements OnInit, OnChanges {
   displayedMonth: Date = new Date();
   filteredActivities: Activity[] | undefined;
   activity: Activity | undefined | null;
+  dateRange: DateRange = 'day';
   constructor() {}
 
   ngOnInit(): void {
@@ -29,8 +30,15 @@ export class CalendarViewComponent implements OnInit, OnChanges {
       this.activity = this.activities?.[0];
     }
   }
+  daterangeChanged(daterange: DateRange) {
+    this.dateRange = daterange;
+  }
   dateChanged(date: Date) {
-    this.filteredActivities = filterActivitiesByTime(this.activities!, [date]);
+    this.filteredActivities = filterActivitiesByTime(
+      this.activities!,
+      [date],
+      this.dateRange
+    );
     this.displayedMonth = date;
   }
 }
