@@ -8,9 +8,11 @@ import { DateRange } from 'src/services/Activity';
   styleUrls: ['./date-picker.component.scss'],
 })
 export class DatePickerComponent implements OnInit {
-  @Output() dateChange = new EventEmitter<Date>();
+  @Output() dateChange = new EventEmitter<Date[]>();
   @Output() daterangeChange = new EventEmitter<DateRange>();
+  calendarView: 'month' | 'year' | 'multi-year' = 'month';
   date = new FormControl(new Date());
+  dateRange: Date[] = [new Date(), new Date()];
   selectedDaterange: DateRange = 'day';
 
   constructor() {}
@@ -18,13 +20,26 @@ export class DatePickerComponent implements OnInit {
   ngOnInit(): void {
     this.dateChanged();
   }
+  weekDateChanged(date: Date[]) {
+    console.log('weekDateChanged', date);
+    this.dateRange = date;
+    this.dateChanged();
+  }
   dateChanged() {
-    if (this.date.value) this.dateChange.emit(this.date.value);
+    if (this.date.value) this.dateChange.emit([this.date.value]);
   }
   selectDaterange(daterange: DateRange) {
     this.selectedDaterange = daterange;
     this.daterangeChange.emit(daterange);
     this.dateChanged();
+    this.changeCalendarView(daterange);
+  }
+  changeCalendarView(dateRange: DateRange) {
+    if (dateRange === 'day') {
+      this.calendarView = 'month';
+    } else if (dateRange === 'month' || dateRange === 'week') {
+      this.calendarView = 'year';
+    }
   }
   nextMonth() {
     if (this.date.value) {

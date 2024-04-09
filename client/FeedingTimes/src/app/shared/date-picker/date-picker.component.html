@@ -33,7 +33,12 @@
   >
     <mat-icon class="fa-solid fa-chevron-right"></mat-icon>
   </button>
-  <div>
+  <div *ngIf="this.selectedDaterange === 'week'">
+    <app-date-picker-week-day-range
+      (dateChanged)="weekDateChanged($event)"
+    ></app-date-picker-week-day-range>
+  </div>
+  <div *ngIf="this.selectedDaterange !== 'week'">
     <mat-form-field>
       <input
         matInput
@@ -46,7 +51,7 @@
         matIconSuffix
         [for]="picker"
       ></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
+      <mat-datepicker #picker [startView]="calendarView"></mat-datepicker>
     </mat-form-field>
   </div>
 </div>

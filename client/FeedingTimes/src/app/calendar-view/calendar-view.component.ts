@@ -33,12 +33,12 @@ export class CalendarViewComponent implements OnInit, OnChanges {
   daterangeChanged(daterange: DateRange) {
     this.dateRange = daterange;
   }
-  dateChanged(date: Date) {
+  dateChanged(date: Date[]) {
     this.filteredActivities = filterActivitiesByTime(
       this.activities!,
-      [date],
+      date,
       this.dateRange
     );
-    this.displayedMonth = date;
+    this.displayedMonth = date[0];
   }
 }

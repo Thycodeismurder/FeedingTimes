@@ -29,6 +29,7 @@ import { TransformEventDataPipe } from './pipes/transform-event-data.pipe';
 import { TransformIconsPipe } from './pipes/transform-icons.pipe';
 import { DatePickerComponent } from './shared/date-picker/date-picker.component';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { DatePickerWeekDayRangeComponent } from './shared/date-picker-week-day-range/date-picker-week-day-range.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -45,6 +46,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     TransformEventDataPipe,
     TransformIconsPipe,
     DatePickerComponent,
+    DatePickerWeekDayRangeComponent,
   ],
   imports: [
     BrowserModule,
