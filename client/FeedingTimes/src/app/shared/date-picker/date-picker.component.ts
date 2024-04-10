@@ -20,7 +20,6 @@ export class DatePickerComponent implements OnInit {
     this.dateChanged();
   }
   weekDateChanged(date: Date[]) {
-    console.log('weekDateChanged', date);
     this.dateRange = date;
     this.dateChange.emit(this.dateRange);
   }
