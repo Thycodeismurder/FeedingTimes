@@ -11,10 +11,6 @@ export function filterActivitiesByTime(
         (activity) =>
           new Date(activity.time).toDateString() === time[0].toDateString()
       );
-    } else if (dateRange === 'week') {
-      return activities.filter(
-        (activity) => new Date(activity.time).getWeek() === time[0].getWeek()
-      );
     } else if (dateRange === 'month') {
       return activities.filter(
         (activity) =>
@@ -43,8 +39,8 @@ export function filterActivitiesByTime(
     } else if (dateRange === 'week') {
       return activities.filter(
         (activity) =>
-          new Date(activity.time).getWeek() >= time[0].getWeek() &&
-          new Date(activity.time).getWeek() <= time[1].getWeek()
+          new Date(activity.time) >= time[0] &&
+          new Date(activity.time) <= time[1]
       );
     } else if (dateRange === 'month') {
       return activities.filter(
@@ -72,20 +68,3 @@ export function filterActivitiesByTime(
     }
   }
 }
-
-declare global {
-  interface Date {
-    getWeek(): number;
-  }
-}
-
-Date.prototype.getWeek = function () {
-  var onejan: Date = new Date(this.getFullYear(), 0, 1);
-  var today: Date = new Date(
-    this.getFullYear(),
-    this.getMonth(),
-    this.getDate()
-  );
-  var dayOfYear = (+today - +onejan + 86400000) / 86400000;
-  return Math.ceil(dayOfYear / 7);
-};

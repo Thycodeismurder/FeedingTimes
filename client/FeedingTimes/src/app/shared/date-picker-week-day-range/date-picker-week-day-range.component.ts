@@ -1,9 +1,17 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { DateAdapter } from '@angular/material/core';
 import {
-  MatDateRangeSelectionStrategy,
   DateRange,
   MAT_DATE_RANGE_SELECTION_STRATEGY,
+  MatDateRangeSelectionStrategy,
 } from '@angular/material/datepicker';
 
 @Component({
@@ -18,16 +26,38 @@ import {
   styleUrl: './date-picker-week-day-range.component.scss',
 })
 export class DatePickerWeekDayRangeComponent
-  implements MatDateRangeSelectionStrategy<string>
+  implements MatDateRangeSelectionStrategy<string>, OnChanges
 {
   @Output() dateChanged = new EventEmitter<Date[]>();
+  @Input() setDate: Date = new Date();
+  currentDate: Date[] = [
+    this._createFiveDayRange(new Date().toString()).start,
+    this._createFiveDayRange(new Date().toString()).end,
+  ];
+  startDate = new FormControl(this.currentDate[0]);
+  endDate = new FormControl(this.currentDate[1]);
 
-  dateRange: DateRange<any> = new DateRange<string>(null, null);
+  dateRange: Date[] = [];
   constructor(private _dateAdapter: DateAdapter<string>) {}
-
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['setDate']) {
+      this.currentDate = [
+        this._createFiveDayRange(this.setDate.toString()).start,
+        this._createFiveDayRange(this.setDate.toString()).end,
+      ];
+      this.startDate.setValue(this.currentDate[0]);
+      this.endDate.setValue(this.currentDate[1]);
+      this.dateChanged.emit(this.currentDate);
+    }
+  }
+  startDateChanged(date: string) {
+    this.dateRange[0] = new Date(date);
+  }
+  endDateChanged(date: string) {
+    this.dateRange[1] = new Date(date);
+    this.dateChanged.emit(this.dateRange);
+  }
   selectionFinished(date: string | null): DateRange<string> {
-    this.dateRange = this._createFiveDayRange(date);
-    this.dateChanged.emit([this.dateRange.start, this.dateRange.end]);
     return this._createFiveDayRange(date);
   }
 

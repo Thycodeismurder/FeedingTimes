@@ -16,14 +16,13 @@ export class DatePickerComponent implements OnInit {
   selectedDaterange: DateRange = 'day';
 
   constructor() {}
-
   ngOnInit(): void {
     this.dateChanged();
   }
   weekDateChanged(date: Date[]) {
     console.log('weekDateChanged', date);
     this.dateRange = date;
-    this.dateChanged();
+    this.dateChange.emit(this.dateRange);
   }
   dateChanged() {
     if (this.date.value) this.dateChange.emit([this.date.value]);
@@ -31,7 +30,11 @@ export class DatePickerComponent implements OnInit {
   selectDaterange(daterange: DateRange) {
     this.selectedDaterange = daterange;
     this.daterangeChange.emit(daterange);
-    this.dateChanged();
+    if (daterange === 'day' || daterange === 'month') {
+      this.dateChanged();
+    } else {
+      this.weekDateChanged(this.dateRange);
+    }
     this.changeCalendarView(daterange);
   }
   changeCalendarView(dateRange: DateRange) {

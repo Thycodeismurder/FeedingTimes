@@ -36,6 +36,7 @@
   <div *ngIf="this.selectedDaterange === 'week'">
     <app-date-picker-week-day-range
       (dateChanged)="weekDateChanged($event)"
+      [setDate]="date.value!"
     ></app-date-picker-week-day-range>
   </div>
   <div *ngIf="this.selectedDaterange !== 'week'">
