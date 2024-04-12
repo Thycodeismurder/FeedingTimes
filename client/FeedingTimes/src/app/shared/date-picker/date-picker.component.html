@@ -35,11 +35,11 @@
   </button>
   <div *ngIf="this.selectedDaterange === 'week'">
     <app-date-picker-week-day-range
-      (dateChanged)="weekDateChanged($event)"
+      (dateChanged)="dateRangeChanged($event)"
       [setDate]="date.value!"
     ></app-date-picker-week-day-range>
   </div>
-  <div *ngIf="this.selectedDaterange !== 'week'">
+  <div *ngIf="this.selectedDaterange === 'day'">
     <mat-form-field>
       <input
         matInput
@@ -54,5 +54,10 @@
       ></mat-datepicker-toggle>
       <mat-datepicker #picker [startView]="calendarView"></mat-datepicker>
     </mat-form-field>
+  </div>
+  <div *ngIf="this.selectedDaterange === 'month'">
+    <app-date-picker-month-range
+      (dateChange)="dateRangeChanged($event)"
+    ></app-date-picker-month-range>
   </div>
 </div>
