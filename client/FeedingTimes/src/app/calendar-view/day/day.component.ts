@@ -18,6 +18,7 @@ export class DayComponent implements OnInit {
       });
     }
     this.isCurrentDay =
-      new Date().getDate() === new Date(this.activities?.[0]?.time!).getDate();
+      new Date().toISOString().split('T')[0] ===
+      new Date(this.activities?.[0]?.time!).toISOString().split('T')[0];
   }
 }
