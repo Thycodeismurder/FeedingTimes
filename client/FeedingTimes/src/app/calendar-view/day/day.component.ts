@@ -18,9 +18,7 @@ export class DayComponent implements OnInit {
         return +new Date(a!.time) - +new Date(b!.time);
       });
     }
-    console.log(this.activities);
     if (this.activities?.[0]?.type === 'empty') {
-      console.log('empty');
       this.showActivities = false;
     }
     this.isCurrentDay =
