@@ -19,6 +19,7 @@ export class CalendarViewComponent implements OnInit, OnChanges {
   displayedMonth: Date = new Date();
   filteredActivities: Activity[] | undefined;
   activity: Activity | undefined | null;
+  groupedActivities: Activity[][] | undefined;
   dateRange: DateRange = 'day';
   constructor() {}
 

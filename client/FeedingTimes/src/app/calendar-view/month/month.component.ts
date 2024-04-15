@@ -5,7 +5,10 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
-import { groupActivitiesByDay } from 'src/app/shared/functions/groupActivitiesByTime';
+import {
+  groupActivitiesByDay,
+  createActivitiesOnEmptydays,
+} from 'src/app/shared/functions/groupActivitiesByTime';
 import { Activity } from 'src/services/Activity';
 
 @Component({
@@ -15,6 +18,7 @@ import { Activity } from 'src/services/Activity';
 })
 export class MonthComponent implements OnInit, OnChanges {
   @Input() activities: Activity[] | undefined;
+  @Input() date: Date = new Date();
   groupedActivities: Activity[][] | undefined;
   constructor() {}
   ngOnChanges(changes: SimpleChanges): void {
@@ -22,7 +26,10 @@ export class MonthComponent implements OnInit, OnChanges {
       this.activities = this.activities?.sort((a, b) => {
         return +new Date(a!.time) - +new Date(b!.time);
       });
-      this.groupedActivities = groupActivitiesByDay(this.activities!);
+      this.groupedActivities = createActivitiesOnEmptydays(
+        groupActivitiesByDay(this.activities ? this.activities : []),
+        this.date
+      );
     }
   }
 
@@ -33,6 +40,9 @@ export class MonthComponent implements OnInit, OnChanges {
       });
     }
 
-    this.groupedActivities = groupActivitiesByDay(this.activities!);
+    this.groupedActivities = createActivitiesOnEmptydays(
+      groupActivitiesByDay(this.activities ? this.activities : []),
+      this.date
+    );
   }
 }
