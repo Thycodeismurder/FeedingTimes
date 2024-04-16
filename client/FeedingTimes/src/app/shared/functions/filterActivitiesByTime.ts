@@ -1,9 +1,9 @@
-import { Activity, DateRange } from 'src/services/Activity';
+import { Activity, TimeFrame } from 'src/services/Activity';
 
 export function filterActivitiesByTime(
   activities: Activity[],
   time: Date[],
-  dateRange: DateRange
+  dateRange: TimeFrame
 ): Activity[] {
   if (time[1] === undefined) {
     if (dateRange === 'day') {

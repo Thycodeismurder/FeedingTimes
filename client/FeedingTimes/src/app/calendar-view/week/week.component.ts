@@ -21,6 +21,8 @@ export class WeekComponent implements OnInit {
     }
 
     // Grouping objects by the same day
-    this.groupedActivities = groupActivitiesByDay(this.activities!);
+    this.groupedActivities = groupActivitiesByDay(
+      this.activities ? this.activities : []
+    );
   }
 }

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { DateRange } from 'src/services/Activity';
+import { TimeFrame } from 'src/services/Activity';
 
 @Component({
   selector: 'app-date-picker',
@@ -9,25 +9,24 @@ import { DateRange } from 'src/services/Activity';
 })
 export class DatePickerComponent implements OnInit {
   @Output() dateChange = new EventEmitter<Date[]>();
-  @Output() daterangeChange = new EventEmitter<DateRange>();
+  @Output() daterangeChange = new EventEmitter<TimeFrame>();
   calendarView: 'month' | 'year' | 'multi-year' = 'month';
   date = new FormControl(new Date());
   dateRange: Date[] = [new Date(), new Date()];
-  selectedDaterange: DateRange = 'day';
+  selectedDaterange: TimeFrame = 'day';
 
   constructor() {}
   ngOnInit(): void {
     this.dateChanged();
   }
   dateRangeChanged(date: Date[]) {
-    console.log(date);
     this.dateRange = date;
     this.dateChange.emit(this.dateRange);
   }
   dateChanged() {
     if (this.date.value) this.dateChange.emit([this.date.value]);
   }
-  selectDaterange(daterange: DateRange) {
+  selectDaterange(daterange: TimeFrame) {
     this.selectedDaterange = daterange;
     this.daterangeChange.emit(daterange);
     if (daterange === 'day' || daterange === 'month') {
@@ -37,7 +36,7 @@ export class DatePickerComponent implements OnInit {
     }
     this.changeCalendarView(daterange);
   }
-  changeCalendarView(dateRange: DateRange) {
+  changeCalendarView(dateRange: TimeFrame) {
     if (dateRange === 'day') {
       this.calendarView = 'month';
     } else if (dateRange === 'month' || dateRange === 'week') {

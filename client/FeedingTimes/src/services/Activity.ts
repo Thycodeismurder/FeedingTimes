@@ -5,4 +5,4 @@ export type Activity = {
   iconPath: string;
 };
 
-export type DateRange = 'day' | 'month' | 'week' | 'year';
+export type TimeFrame = 'day' | 'month' | 'week' | 'year';

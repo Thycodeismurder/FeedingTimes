@@ -10,7 +10,7 @@
       {{ displayedMonth | date : "MMMM" }}
     </div>
     <app-month
-      [activities]="this.filteredActivities"
+      [activities]="this.groupedActivities"
       [date]="displayedMonth"
     ></app-month>
   </div>
