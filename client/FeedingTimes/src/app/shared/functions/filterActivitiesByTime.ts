@@ -1,4 +1,5 @@
 import { Activity, TimeFrame } from 'src/services/Activity';
+import { createFiveDayRange } from './groupActivitiesByTime';
 
 export function filterActivitiesByTime(
   activities: Activity[],
@@ -7,6 +8,8 @@ export function filterActivitiesByTime(
 ): Activity[] {
   if (time[1] === undefined) {
     if (dateRange === 'day') {
+      console.log('oikea fire');
+      console.log(time[0].toDateString());
       return activities.filter(
         (activity) =>
           new Date(activity.time).toDateString() === time[0].toDateString()
@@ -37,10 +40,17 @@ export function filterActivitiesByTime(
           new Date(activity.time).toDateString() <= time[1].toDateString()
       );
     } else if (dateRange === 'week') {
+      console.log(
+        'week weekw week week week week week week week week week week' +
+          createFiveDayRange(time[0]).start.toDateString() +
+          createFiveDayRange(time[1]).end.toDateString()
+      );
       return activities.filter(
         (activity) =>
-          new Date(activity.time) >= time[0] &&
-          new Date(activity.time) <= time[1]
+          new Date(activity.time).toDateString() >=
+            createFiveDayRange(time[0]).start.toDateString() &&
+          new Date(activity.time).toDateString() <=
+            createFiveDayRange(time[1]).end.toDateString()
       );
     } else if (dateRange === 'month') {
       return activities.filter(

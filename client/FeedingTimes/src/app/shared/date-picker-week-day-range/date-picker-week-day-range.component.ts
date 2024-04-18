@@ -38,9 +38,7 @@ export class DatePickerWeekDayRangeComponent
   endDate = new FormControl(this.currentDate[1]);
 
   dateRange: Date[] = [];
-  constructor(private _dateAdapter: DateAdapter<string>) {
-    console.log(this.setDate);
-  }
+  constructor(private _dateAdapter: DateAdapter<string>) {}
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['setDate']) {
       this.currentDate = [
@@ -49,7 +47,6 @@ export class DatePickerWeekDayRangeComponent
       ];
       this.startDate.setValue(this.currentDate[0]);
       this.endDate.setValue(this.currentDate[1]);
-      this.dateChanged.emit(this.currentDate);
     }
   }
   startDateChanged(date: string) {

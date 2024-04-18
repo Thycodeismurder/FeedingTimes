@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { User } from 'src/services/User';
+import { UserDataServiceService } from 'src/services/user-data-service.service';
 
 @Component({
   selector: 'app-top-nav',

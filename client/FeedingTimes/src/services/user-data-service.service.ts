@@ -1,9 +1,14 @@
-import { Injectable } from '@angular/core';
-import { Observable, Subscriber, observable } from 'rxjs';
-import { ActivityTypes, DbActivity, User, Feeding, UserEvent } from './User';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Activity } from './Activity';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { TransformEventDataPipe } from 'src/app/pipes/transform-event-data.pipe';
+import { filterActivitiesByTime } from 'src/app/shared/functions/filterActivitiesByTime';
+import {
+  createActivitiesOnEmptydays,
+  groupActivitiesByDay,
+} from 'src/app/shared/functions/groupActivitiesByTime';
+import { Activity, TimeFrame } from './Activity';
+import { ActivityTypes, DbActivity, User } from './User';
 
 const apiEndPoint =
   'https://v0zp9or438.execute-api.eu-west-1.amazonaws.com/Prod/';
@@ -18,6 +23,10 @@ export class UserDataServiceService {
   transformEventData: TransformEventDataPipe;
   user: User | undefined;
   DbActivities: DbActivity[] | undefined;
+  filteredActivities: Activity[] | undefined;
+  groupedActivities: Activity[][] | undefined;
+  dateRange: TimeFrame = 'day';
+  displayedDate: Date = new Date();
   constructor(private httpClient: HttpClient) {
     this.transformEventData = new TransformEventDataPipe();
   }
@@ -57,6 +66,35 @@ export class UserDataServiceService {
       });
       return activities;
     } else return [{ type: '', info: '', time: '', iconPath: '' }];
+  }
+  filterActivities(date: Date[]) {
+    let activities = this.getActivities();
+    this.filteredActivities = filterActivitiesByTime(
+      activities ? activities : [],
+      date,
+      this.dateRange
+    );
+    this.sortActivities(this.filteredActivities);
+    this.displayedDate = date[0];
+  }
+  createGroupedActivities(): Activity[][] {
+    this.groupedActivities = createActivitiesOnEmptydays(
+      groupActivitiesByDay(
+        this.filteredActivities ? this.filteredActivities : []
+      ),
+      this.displayedDate,
+      this.dateRange
+    );
+    return this.groupedActivities;
+  }
+  sortActivities(activities: Activity[]): Activity[] | undefined {
+    this.filteredActivities = this.filteredActivities?.sort((a, b) => {
+      return +new Date(a!.time) - +new Date(b!.time);
+    });
+    return this.filteredActivities;
+  }
+  dateRangeChanged(daterange: TimeFrame) {
+    this.dateRange = daterange;
   }
   postActivity(activity: ActivityTypes): Observable<{}> {
     if (activity.type === 'Feeding' && 'quantity' in activity) {

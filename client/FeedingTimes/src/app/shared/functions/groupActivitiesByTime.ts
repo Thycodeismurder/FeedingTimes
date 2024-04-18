@@ -32,8 +32,6 @@ export function createActivitiesOnEmptydays(
   } else {
     numberOfDays = 1;
   }
-  console.log(numberOfDays);
-  console.log(dateToFill);
   let activitiesWithEmptyDays: Activity[][] = [];
   for (let i = 1; i <= numberOfDays; i++) {
     if (activitiesWithEmptyDays[i - 1] === undefined) {
@@ -65,7 +63,7 @@ export function createActivitiesOnEmptydays(
   return activitiesWithEmptyDays;
 }
 
-function createFiveDayRange(date: Date | null): DateRange<any> {
+export function createFiveDayRange(date: Date | null): DateRange<any> {
   if (date) {
     const day = date.getDay();
     const diff = date.getDate() - day + (day == 0 ? -6 : 1);
