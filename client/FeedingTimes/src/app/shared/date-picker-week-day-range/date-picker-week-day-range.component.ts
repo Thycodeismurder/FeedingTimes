@@ -32,13 +32,12 @@ export class DatePickerWeekDayRangeComponent
   @Output() dateChanged = new EventEmitter<Date[]>();
   @Input() setDate: Date = new Date();
   currentDate: Date[] = [
-    this._createFiveDayRange(new Date().toString()).start,
-    this._createFiveDayRange(new Date().toString()).end,
+    new Date(), // Start date
+    new Date(), // End date
   ];
-  startDate = new FormControl(this.currentDate[0]);
-  endDate = new FormControl(this.currentDate[1]);
+  startDate = new FormControl(new Date());
+  endDate = new FormControl(new Date());
 
-  dateRange: Date[] = [];
   constructor(private _dateAdapter: DateAdapter<string>) {}
   ngOnInit(): void {
     this.dateChanged.emit(this.currentDate);
@@ -54,11 +53,11 @@ export class DatePickerWeekDayRangeComponent
     }
   }
   startDateChanged(date: string) {
-    this.dateRange[0] = new Date(date);
+    this.currentDate[0] = new Date(date);
   }
   endDateChanged(date: string) {
-    this.dateRange[1] = new Date(date);
-    this.dateChanged.emit(this.dateRange);
+    this.currentDate[1] = new Date(date);
+    this.dateChanged.emit(this.currentDate);
   }
   selectionFinished(date: string | null): DateRange<string> {
     return this._createFiveDayRange(date);

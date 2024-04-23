@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { TimeFrame } from 'src/services/Activity';
+import { createFiveDayRange } from '../functions/groupActivitiesByTime';
 
 @Component({
   selector: 'app-date-picker',
@@ -20,11 +21,15 @@ export class DatePickerComponent implements OnInit {
     this.dateChanged();
   }
   dateRangeChanged(date: Date[]) {
+    console.log('dateRangeChanged', date);
     this.dateRange = date;
     this.dateChange.emit(this.dateRange);
   }
   dateChanged() {
-    if (this.date.value) this.dateChange.emit([this.date.value]);
+    if (this.date.value) {
+      this.dateRange[0] = new Date(this.date.value);
+      this.dateChange.emit([this.date.value]);
+    }
   }
   selectDaterange(calendarView: TimeFrame) {
     this.selectedCalendarView = calendarView;
@@ -44,18 +49,52 @@ export class DatePickerComponent implements OnInit {
       this.date.setValue(
         new Date(this.date.value.setMonth(this.date.value.getMonth() + 1))
       );
-      this.dateChanged();
+      if (
+        this.selectedCalendarView === 'month' ||
+        this.selectedCalendarView === 'day'
+      ) {
+        this.dateChanged();
+      } else {
+        this.dateRange = [
+          createFiveDayRange(new Date(this.date.value)).start,
+          createFiveDayRange(new Date(this.date.value)).end,
+        ];
+        this.dateRangeChanged(this.dateRange);
+      }
     }
   }
   previousMonth() {
-    if (this.date.value)
+    if (this.date.value) {
       this.date.setValue(
         new Date(this.date.value.setMonth(this.date.value.getMonth() - 1))
       );
-    this.dateChanged();
+      if (
+        this.selectedCalendarView === 'month' ||
+        this.selectedCalendarView === 'day'
+      ) {
+        this.dateChanged();
+      } else {
+        this.dateRange = [
+          createFiveDayRange(new Date(this.date.value)).start,
+          createFiveDayRange(new Date(this.date.value)).end,
+        ];
+        this.dateRangeChanged(this.dateRange);
+      }
+    }
   }
   setToday() {
     this.date.setValue(new Date());
-    this.dateChanged();
+    if (
+      this.selectedCalendarView === 'month' ||
+      this.selectedCalendarView === 'day'
+    ) {
+      this.dateChanged();
+    } else {
+      this.dateRange = [
+        createFiveDayRange(new Date()).start,
+        createFiveDayRange(new Date()).end,
+      ];
+      this.dateRangeChanged(this.dateRange);
+    }
   }
 }

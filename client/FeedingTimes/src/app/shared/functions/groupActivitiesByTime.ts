@@ -55,10 +55,21 @@ export function createActivitiesOnEmptydays(
     }
   }
   if (activities.length > 0) {
-    activities.forEach((dayActivities) => {
-      activitiesWithEmptyDays[new Date(dayActivities[0].time).getDate() - 1] =
-        dayActivities;
-    });
+    if (dateRange === 'month') {
+      activities.forEach((dayActivities) => {
+        activitiesWithEmptyDays[new Date(dayActivities[0].time).getDate() - 1] =
+          dayActivities;
+      });
+    } else if (dateRange === 'week') {
+      activities.forEach((dayActivities) => {
+        activitiesWithEmptyDays[
+          new Date(dayActivities[0].time).getDate() -
+            createFiveDayRange(dateToFill).start.getDate()
+        ] = dayActivities;
+      });
+    } else {
+      activitiesWithEmptyDays[0] = activities[0];
+    }
   }
   return activitiesWithEmptyDays;
 }

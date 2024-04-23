@@ -36,7 +36,7 @@
   <div *ngIf="this.selectedCalendarView === 'week'">
     <app-date-picker-week-day-range
       (dateChanged)="dateRangeChanged($event)"
-      [setDate]="date.value!"
+      [setDate]="dateRange[0]"
     ></app-date-picker-week-day-range>
   </div>
   <div *ngIf="this.selectedCalendarView === 'day'">

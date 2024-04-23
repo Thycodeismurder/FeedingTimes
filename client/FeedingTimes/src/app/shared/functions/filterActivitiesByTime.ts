@@ -34,15 +34,15 @@ export function filterActivitiesByTime(
     if (dateRange === 'day') {
       return activities.filter(
         (activity) =>
-          new Date(activity.time).toDateString() >= time[0].toDateString() &&
-          new Date(activity.time).toDateString() <= time[1].toDateString()
+          new Date(activity.time).toDateString() === time[0].toDateString()
       );
     } else if (dateRange === 'week') {
-      return activities.filter(
-        (activity) =>
-          new Date(activity.time).toDateString() >= time[0].toDateString() &&
-          new Date(activity.time).toDateString() <= time[1].toDateString()
-      );
+      return activities.filter((activity) => {
+        return (
+          new Date(activity.time).getTime() >= time[0].getTime() &&
+          new Date(activity.time).getTime() <= time[1].getTime()
+        );
+      });
     } else if (dateRange === 'month') {
       return activities.filter(
         (activity) =>
