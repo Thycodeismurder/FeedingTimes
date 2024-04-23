@@ -18,18 +18,24 @@ export class CalendarViewComponent implements OnInit {
       this.loading = false;
       this.userDataService.filterActivities([this.displayedDate]);
     });
-    this.groupedActivities = this.userDataService.createGroupedActivities();
+    this.userDataService.createGroupedActivities().then((groupedActivities) => {
+      this.groupedActivities = groupedActivities;
+    });
+  }
+  setLoading(loading: boolean) {
+    this.loading = loading;
   }
   daterangeChanged(daterange: TimeFrame) {
-    console.log('daterange changed' + daterange);
     this.userDataService.dateRangeChanged(daterange);
     this.dateRange = daterange;
   }
   dateChanged(date: Date[]) {
-    this.loading = true;
+    this.setLoading(true);
     this.userDataService.filterActivities(date);
     this.displayedDate = date[0];
-    this.groupedActivities = this.userDataService.createGroupedActivities();
-    this.loading = false;
+    this.userDataService.createGroupedActivities().then((groupedActivities) => {
+      this.groupedActivities = groupedActivities;
+    });
+    this.setLoading(false);
   }
 }

@@ -3,6 +3,7 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  OnInit,
   Output,
   SimpleChanges,
 } from '@angular/core';
@@ -26,7 +27,7 @@ import {
   styleUrl: './date-picker-week-day-range.component.scss',
 })
 export class DatePickerWeekDayRangeComponent
-  implements MatDateRangeSelectionStrategy<string>, OnChanges
+  implements MatDateRangeSelectionStrategy<string>, OnChanges, OnInit
 {
   @Output() dateChanged = new EventEmitter<Date[]>();
   @Input() setDate: Date = new Date();
@@ -39,6 +40,9 @@ export class DatePickerWeekDayRangeComponent
 
   dateRange: Date[] = [];
   constructor(private _dateAdapter: DateAdapter<string>) {}
+  ngOnInit(): void {
+    this.dateChanged.emit(this.currentDate);
+  }
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['setDate']) {
       this.currentDate = [

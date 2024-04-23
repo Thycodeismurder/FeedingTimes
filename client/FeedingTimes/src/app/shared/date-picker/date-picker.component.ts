@@ -13,7 +13,7 @@ export class DatePickerComponent implements OnInit {
   calendarView: 'month' | 'year' | 'multi-year' = 'month';
   date = new FormControl(new Date());
   dateRange: Date[] = [new Date(), new Date()];
-  selectedDaterange: TimeFrame = 'day';
+  selectedCalendarView: TimeFrame = 'day';
 
   constructor() {}
   ngOnInit(): void {
@@ -26,20 +26,16 @@ export class DatePickerComponent implements OnInit {
   dateChanged() {
     if (this.date.value) this.dateChange.emit([this.date.value]);
   }
-  selectDaterange(daterange: TimeFrame) {
-    this.selectedDaterange = daterange;
-    this.daterangeChange.emit(daterange);
-    if (daterange === 'day' || daterange === 'month') {
-      this.dateChanged();
-    } else {
-      this.dateRangeChanged(this.dateRange);
-    }
-    this.changeCalendarView(daterange);
+  selectDaterange(calendarView: TimeFrame) {
+    this.selectedCalendarView = calendarView;
+    this.daterangeChange.emit(calendarView);
+    if (calendarView === 'day') this.dateChanged();
+    this.changeCalendarView(calendarView);
   }
-  changeCalendarView(dateRange: TimeFrame) {
-    if (dateRange === 'day') {
+  changeCalendarView(calendarView: TimeFrame) {
+    if (calendarView === 'day') {
       this.calendarView = 'month';
-    } else if (dateRange === 'month' || dateRange === 'week') {
+    } else if (calendarView === 'month' || calendarView === 'week') {
       this.calendarView = 'year';
     }
   }

@@ -1,6 +1,7 @@
 import {
   Component,
   EventEmitter,
+  OnInit,
   Output,
   ViewEncapsulation,
 } from '@angular/core';
@@ -44,7 +45,10 @@ export const MY_FORMATS = {
   ],
   encapsulation: ViewEncapsulation.None,
 })
-export class DatePickerMonthRangeComponent {
+export class DatePickerMonthRangeComponent implements OnInit {
+  ngOnInit(): void {
+    if (this.date.value) this.dateChange.emit([this.date.value.toDate()]);
+  }
   @Output() dateChange = new EventEmitter<Date[]>();
   date = new FormControl(moment());
 

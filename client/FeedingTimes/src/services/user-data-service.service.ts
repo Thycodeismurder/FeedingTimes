@@ -77,7 +77,7 @@ export class UserDataServiceService {
     this.sortActivities(this.filteredActivities);
     this.displayedDate = date[0];
   }
-  createGroupedActivities(): Activity[][] {
+  createGroupedActivities(): Promise<Activity[][]> {
     this.groupedActivities = createActivitiesOnEmptydays(
       groupActivitiesByDay(
         this.filteredActivities ? this.filteredActivities : []
@@ -85,7 +85,10 @@ export class UserDataServiceService {
       this.displayedDate,
       this.dateRange
     );
-    return this.groupedActivities;
+    const response = new Promise<Activity[][]>((resolve) => {
+      resolve(this.groupedActivities ? this.groupedActivities : []);
+    });
+    return response;
   }
   sortActivities(activities: Activity[]): Activity[] | undefined {
     this.filteredActivities = this.filteredActivities?.sort((a, b) => {
