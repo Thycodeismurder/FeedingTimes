@@ -58,6 +58,7 @@
   <div *ngIf="this.selectedCalendarView === 'month'">
     <app-date-picker-month-range
       (dateChange)="dateRangeChanged($event)"
+      [setDate]="dateRange[0]"
     ></app-date-picker-month-range>
   </div>
 </div>

@@ -22,10 +22,12 @@ export class DatePickerComponent implements OnInit {
   }
   dateRangeChanged(date: Date[]) {
     console.log('dateRangeChanged', date);
+    this.date.setValue(date[0]);
     this.dateRange = date;
     this.dateChange.emit(this.dateRange);
   }
   dateChanged() {
+    console.log('datechanged', this.date.value);
     if (this.date.value) {
       this.dateRange[0] = new Date(this.date.value);
       this.dateChange.emit([this.date.value]);

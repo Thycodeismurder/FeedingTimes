@@ -1,8 +1,11 @@
 import {
   Component,
   EventEmitter,
+  Input,
+  OnChanges,
   OnInit,
   Output,
+  SimpleChanges,
   ViewEncapsulation,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
@@ -45,12 +48,19 @@ export const MY_FORMATS = {
   ],
   encapsulation: ViewEncapsulation.None,
 })
-export class DatePickerMonthRangeComponent implements OnInit {
+export class DatePickerMonthRangeComponent implements OnInit, OnChanges {
+  @Output() dateChange = new EventEmitter<Date[]>();
+  @Input() setDate: Date = new Date();
+  date = new FormControl(moment());
+
   ngOnInit(): void {
     if (this.date.value) this.dateChange.emit([this.date.value.toDate()]);
   }
-  @Output() dateChange = new EventEmitter<Date[]>();
-  date = new FormControl(moment());
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['setDate']) {
+      this.date.setValue(moment(this.setDate));
+    }
+  }
 
   dateChanged() {
     if (this.date.value) this.dateChange.emit([this.date.value.toDate()]);
