@@ -31,6 +31,7 @@ import { DatePickerComponent } from './shared/date-picker/date-picker.component'
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { DatePickerWeekDayRangeComponent } from './shared/date-picker-week-day-range/date-picker-week-day-range.component';
 import { DatePickerMonthRangeComponent } from './shared/date-picker-month-range/date-picker-month-range.component';
+import { LoginComponent } from './login/login.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -49,6 +50,7 @@ import { DatePickerMonthRangeComponent } from './shared/date-picker-month-range/
     DatePickerComponent,
     DatePickerWeekDayRangeComponent,
     DatePickerMonthRangeComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,

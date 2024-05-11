@@ -20,14 +20,5 @@ export class AppComponent implements OnInit {
     this.userService.getUserData().subscribe(() => {
       this.user = this.userService.getUser();
     });
-    const quessIt = {
-      2: 'e',
-      5: 't',
-      1: 'r',
-      4: 'c',
-      3: 'a',
-    };
-    const result = Object.values(quessIt).reduce((acc, val) => acc + val, 'p');
-    console.log(result);
   }
 }

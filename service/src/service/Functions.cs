@@ -1,10 +1,25 @@
 using System.Net;
+using System;
+using Amazon;
+using Amazon.Runtime;
+using Amazon.S3;
+using Amazon.S3.Model;
 using Amazon.Lambda.Core;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
 using Amazon.DynamoDBv2.DocumentModel;
 using System.Text.Json;
+using Amazon.Extensions.NETCore.Setup;
+using Amazon.CognitoIdentityProvider;
+using Amazon.CognitoIdentity;
+using Amazon.Extensions.CognitoAuthentication;
+using Amazon.CognitoIdentityProvider.Model;
+using System.Security.Cryptography;
+using System.Runtime.CompilerServices;
+using System.Text;
+
+
 
 // Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
@@ -13,11 +28,63 @@ namespace service;
 
 public class Functions
 {
+    public static class CognitoHashCalculator
+    {
+
+        public static string GetSecretHash(string username, string appClientId, string appSecretKey)
+        {
+            var dataString = username + appClientId;
+
+            var data = Encoding.UTF8.GetBytes(dataString);
+            var key = Encoding.UTF8.GetBytes(appSecretKey);
+
+            return Convert.ToBase64String(HmacSHA256(data, key));
+        }
+
+        public static byte[] HmacSHA256(byte[] data, byte[] key)
+        {
+            using (var shaAlgorithm = new HMACSHA256(key))
+            {
+                var result = shaAlgorithm.ComputeHash(data);
+                return result;
+            }
+        }
+    }
     /// <summary>
     /// Default constructor that Lambda will invoke.
     /// </summary>
     public Functions()
     {
+    }
+    private async Task<string> CognitoSignUpAsync(string username, string password, string clienId, string email)
+    {
+        AmazonCognitoIdentityProviderClient provider = new AmazonCognitoIdentityProviderClient(Amazon.RegionEndpoint.EUWest1);
+        var userAttrs = new AttributeType { Name = "email", Value = email };
+        var userAttrsList = new List<AttributeType> { userAttrs };
+        var response = await provider.SignUpAsync(new SignUpRequest
+        {
+            UserAttributes = userAttrsList,
+            ClientId = clienId,
+            Username = username,
+            Password = password,
+            SecretHash = CognitoHashCalculator.GetSecretHash(username, clienId, "1refrj396gpnerhmo8cdd6dlthkulqo6tlfv39ph4vj4ipv4vaq0")
+        });
+        return response.HttpStatusCode == HttpStatusCode.OK ? "User login successfully" : "User login failed";
+    }
+    private async Task<string> CognitoLoginAsync(string username, string password, string clienId)
+    {
+        AmazonCognitoIdentityProviderClient provider = new AmazonCognitoIdentityProviderClient(RegionEndpoint.EUWest1);
+        var clientSecret = "1refrj396gpnerhmo8cdd6dlthkulqo6tlfv39ph4vj4ipv4vaq0";
+        CognitoUserPool userPool = new CognitoUserPool("eu-west-1_GJgfgbUM4", "7l0gb8dt3sjh2d66gh2scm3hiv", provider);
+        CognitoUser user = new CognitoUser(username, clienId, userPool, provider, clientSecret);
+        InitiateSrpAuthRequest authRequest = new InitiateSrpAuthRequest()
+        {
+            Password = password,
+        };
+
+        AuthFlowResponse authResponse = await user.StartWithSrpAuthAsync(authRequest).ConfigureAwait(false);
+        var accessToken = authResponse.AuthenticationResult.AccessToken;
+        return accessToken;
     }
     private async Task<string> QueryCalendarData()
     {
@@ -98,6 +165,59 @@ public class Functions
     /// </summary>
     /// <param name="request"></param>
     /// <returns>The API Gateway response.</returns>
+    /// 
+    public async Task<APIGatewayProxyResponse> SignUp(APIGatewayProxyRequest request, ILambdaContext context)
+    {
+        context.Logger.LogInformation("Get Request\n");
+        var requestBody = JsonSerializer.Deserialize<Dictionary<string, string>>(request.Body.ToString());
+        context.Logger.LogInformation("Username:" + requestBody?["username"] + " Password:" + requestBody?["password"] + " ClientId:" + requestBody?["clientId"] + " Email:" + requestBody?["email"]);
+        if (requestBody != null && requestBody.ContainsKey("username") && requestBody.ContainsKey("password") && requestBody.ContainsKey("clientId") && requestBody.ContainsKey("email"))
+        {
+            var response = new APIGatewayProxyResponse
+            {
+                StatusCode = (int)HttpStatusCode.OK,
+                Body = await CognitoSignUpAsync(requestBody["username"], requestBody["password"], requestBody["clientId"], requestBody["email"]),
+                Headers = getHeaders()
+            };
+            return response;
+        }
+        else
+        {
+            var response = new APIGatewayProxyResponse
+            {
+                StatusCode = (int)HttpStatusCode.BadRequest,
+                Body = "Body of request not found!",
+                Headers = getHeaders()
+            };
+            return response;
+        }
+    }
+    public async Task<APIGatewayProxyResponse> Login(APIGatewayProxyRequest request, ILambdaContext context)
+    {
+        context.Logger.LogInformation("Get Request\n");
+        var requestBody = JsonSerializer.Deserialize<Dictionary<string, string>>(request.Body.ToString());
+        context.Logger.LogInformation("Username:" + requestBody?["username"] + " Password:" + requestBody?["password"] + " ClientId:" + requestBody?["clientId"]);
+        if (requestBody != null && requestBody.ContainsKey("username") && requestBody.ContainsKey("password") && requestBody.ContainsKey("clientId"))
+        {
+            var response = new APIGatewayProxyResponse
+            {
+                StatusCode = (int)HttpStatusCode.OK,
+                Body = await CognitoLoginAsync(requestBody["username"], requestBody["password"], requestBody["clientId"]),
+                Headers = getHeaders()
+            };
+            return response;
+        }
+        else
+        {
+            var response = new APIGatewayProxyResponse
+            {
+                StatusCode = (int)HttpStatusCode.BadRequest,
+                Body = "Body of request not found!",
+                Headers = getHeaders()
+            };
+            return response;
+        }
+    }
     public async Task<APIGatewayProxyResponse> GetUserData(APIGatewayProxyRequest request, ILambdaContext context)
     {
         context.Logger.LogInformation("Get Request\n");
