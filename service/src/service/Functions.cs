@@ -58,7 +58,7 @@ public class Functions
     }
     private async Task<string> CognitoSignUpAsync(string username, string password, string clienId, string email)
     {
-        AmazonCognitoIdentityProviderClient provider = new AmazonCognitoIdentityProviderClient(Amazon.RegionEndpoint.EUWest1);
+        AmazonCognitoIdentityProviderClient provider = new AmazonCognitoIdentityProviderClient(RegionEndpoint.EUWest1);
         var userAttrs = new AttributeType { Name = "email", Value = email };
         var userAttrsList = new List<AttributeType> { userAttrs };
         var response = await provider.SignUpAsync(new SignUpRequest
@@ -86,9 +86,18 @@ public class Functions
         var accessToken = authResponse.AuthenticationResult.AccessToken;
         return accessToken;
     }
+    private string CognitoLogoutAsync(string username, string clienId)
+    {
+        AmazonCognitoIdentityProviderClient provider = new AmazonCognitoIdentityProviderClient(RegionEndpoint.EUWest1);
+        var clientSecret = "1refrj396gpnerhmo8cdd6dlthkulqo6tlfv39ph4vj4ipv4vaq0";
+        CognitoUserPool userPool = new CognitoUserPool("eu-west-1_GJgfgbUM4", "7l0gb8dt3sjh2d66gh2scm3hiv", provider);
+        CognitoUser user = new CognitoUser(username, clienId, userPool, provider, clientSecret);
+        user.SignOut();
+        return "User sign out successfully";
+    }
     private async Task<string> QueryCalendarData()
     {
-        using var client = new AmazonDynamoDBClient(Amazon.RegionEndpoint.EUWest1);
+        using var client = new AmazonDynamoDBClient(RegionEndpoint.EUWest1);
         var response = await client.QueryAsync(new QueryRequest
         {
             TableName = "CalendarData",
@@ -106,7 +115,7 @@ public class Functions
     }
     private async Task<string> QueryUserData()
     {
-        using var client = new AmazonDynamoDBClient(Amazon.RegionEndpoint.EUWest1);
+        using var client = new AmazonDynamoDBClient(RegionEndpoint.EUWest1);
         var response = await client.QueryAsync(new QueryRequest
         {
             TableName = "User",
@@ -124,7 +133,7 @@ public class Functions
     }
     private async Task<string> PostFeedingAsync(string type, string time, string quantity, string icon, string date)
     {
-        using var client = new AmazonDynamoDBClient(Amazon.RegionEndpoint.EUWest1);
+        using var client = new AmazonDynamoDBClient(RegionEndpoint.EUWest1);
         try
         {
             var response = await client.UpdateItemAsync(new UpdateItemRequest
@@ -177,6 +186,32 @@ public class Functions
             {
                 StatusCode = (int)HttpStatusCode.OK,
                 Body = await CognitoSignUpAsync(requestBody["username"], requestBody["password"], requestBody["clientId"], requestBody["email"]),
+                Headers = getHeaders()
+            };
+            return response;
+        }
+        else
+        {
+            var response = new APIGatewayProxyResponse
+            {
+                StatusCode = (int)HttpStatusCode.BadRequest,
+                Body = "Body of request not found!",
+                Headers = getHeaders()
+            };
+            return response;
+        }
+    }
+    public APIGatewayProxyResponse Logout(APIGatewayProxyRequest request, ILambdaContext context)
+    {
+        context.Logger.LogInformation("Get Request\n");
+        var requestBody = JsonSerializer.Deserialize<Dictionary<string, string>>(request.Body.ToString());
+        context.Logger.LogInformation("Username:" + requestBody?["username"] + " ClientId:" + requestBody?["clientId"]);
+        if (requestBody != null && requestBody.ContainsKey("username") && requestBody.ContainsKey("clientId"))
+        {
+            var response = new APIGatewayProxyResponse
+            {
+                StatusCode = (int)HttpStatusCode.OK,
+                Body = CognitoLogoutAsync(requestBody["username"], requestBody["clientId"]),
                 Headers = getHeaders()
             };
             return response;

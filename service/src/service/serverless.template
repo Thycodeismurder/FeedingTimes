@@ -191,6 +191,52 @@
         }
       }
     },
+    "Logout": {
+      "Type": "AWS::Serverless::Function",
+      "Properties": {
+        "Architectures": [
+          "x86_64"
+        ],
+        "Handler": "service::service.Functions::Logout",
+        "Runtime": "dotnet6",
+        "CodeUri": "",
+        "MemorySize": 256,
+        "Timeout": 30,
+        "Role": null,
+        "Policies": [
+          "AWSLambdaBasicExecutionRole",
+          {
+            "Version": "2012-10-17",
+            "Statement": [
+              {
+                "Effect": "Allow",
+                "Action": [
+                  "cognito-idp:AdmininitiateAuth"
+                ],
+                "Resource": "*"
+              },
+              {
+                "Effect": "Allow",
+                "Action": "lambda:InvokeFunction",
+                "Resource": "*"
+              }
+            ]
+          }
+        ],
+        "Events": {
+          "RootPost": {
+            "Type": "Api",
+            "Properties": {
+              "Path": "/feedingtimes/logout",
+              "Method": "POST",
+              "RestApiId": {
+                "Ref": "ServerlessRestApi"
+              }
+            }
+          }
+        }
+      }
+    },
     "PostFeeding": {
       "Type": "AWS::Serverless::Function",
       "Properties": {
