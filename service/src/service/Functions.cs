@@ -18,6 +18,7 @@ using Amazon.CognitoIdentityProvider.Model;
 using System.Security.Cryptography;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.IdentityModel.Tokens.Jwt;
 
 
 
@@ -71,7 +72,7 @@ public class Functions
         });
         return response.HttpStatusCode == HttpStatusCode.OK ? "User login successfully" : "User login failed";
     }
-    private async Task<string> CognitoLoginAsync(string username, string password, string clienId)
+    private async Task<string> CognitoLoginAsync(string username, string password, string clienId, ILambdaContext context)
     {
         AmazonCognitoIdentityProviderClient provider = new AmazonCognitoIdentityProviderClient(RegionEndpoint.EUWest1);
         var clientSecret = "1refrj396gpnerhmo8cdd6dlthkulqo6tlfv39ph4vj4ipv4vaq0";
@@ -83,10 +84,28 @@ public class Functions
         };
 
         AuthFlowResponse authResponse = await user.StartWithSrpAuthAsync(authRequest).ConfigureAwait(false);
+        var tokenHandler = new JwtSecurityTokenHandler();
         var accessToken = authResponse.AuthenticationResult.AccessToken;
-        return accessToken;
+        var valitedToken = tokenHandler.ReadToken(accessToken);
+        var tokenList = RemoveSpecialCharacters(valitedToken.ToString()!).Split(',');
+        return "Accesstoken:" + accessToken + tokenList?[2].ToString();
     }
-    private string CognitoLogoutAsync(string username, string clienId)
+    private string RemoveSpecialCharacters(string str)
+    {
+        foreach (char c in str)
+        {
+            if (c == '{' || c == '}')
+            {
+                str = str.Replace(c, ' ');
+            }
+            if (c == '.')
+            {
+                str = str.Replace(c, ',');
+            }
+        }
+        return str;
+    }
+    private string CognitoLogout(string username, string clienId)
     {
         AmazonCognitoIdentityProviderClient provider = new AmazonCognitoIdentityProviderClient(RegionEndpoint.EUWest1);
         var clientSecret = "1refrj396gpnerhmo8cdd6dlthkulqo6tlfv39ph4vj4ipv4vaq0";
@@ -211,7 +230,7 @@ public class Functions
             var response = new APIGatewayProxyResponse
             {
                 StatusCode = (int)HttpStatusCode.OK,
-                Body = CognitoLogoutAsync(requestBody["username"], requestBody["clientId"]),
+                Body = CognitoLogout(requestBody["username"], requestBody["clientId"]),
                 Headers = getHeaders()
             };
             return response;
@@ -237,7 +256,7 @@ public class Functions
             var response = new APIGatewayProxyResponse
             {
                 StatusCode = (int)HttpStatusCode.OK,
-                Body = await CognitoLoginAsync(requestBody["username"], requestBody["password"], requestBody["clientId"]),
+                Body = await CognitoLoginAsync(requestBody["username"], requestBody["password"], requestBody["clientId"], context),
                 Headers = getHeaders()
             };
             return response;
