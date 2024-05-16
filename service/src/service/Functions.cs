@@ -72,12 +72,13 @@ public class Functions
         });
         return response.HttpStatusCode == HttpStatusCode.OK ? "User login successfully" : "User login failed";
     }
-    private async Task<string> CognitoLoginAsync(string username, string password, string clienId, ILambdaContext context)
+    private async Task<string> CognitoLoginAsync(string username, string password, ILambdaContext context)
     {
         AmazonCognitoIdentityProviderClient provider = new AmazonCognitoIdentityProviderClient(RegionEndpoint.EUWest1);
         var clientSecret = "1refrj396gpnerhmo8cdd6dlthkulqo6tlfv39ph4vj4ipv4vaq0";
+        var clientId = "7l0gb8dt3sjh2d66gh2scm3hiv";
         CognitoUserPool userPool = new CognitoUserPool("eu-west-1_GJgfgbUM4", "7l0gb8dt3sjh2d66gh2scm3hiv", provider);
-        CognitoUser user = new CognitoUser(username, clienId, userPool, provider, clientSecret);
+        CognitoUser user = new CognitoUser(username, clientId, userPool, provider, clientSecret);
         InitiateSrpAuthRequest authRequest = new InitiateSrpAuthRequest()
         {
             Password = password,
@@ -88,7 +89,9 @@ public class Functions
         var accessToken = authResponse.AuthenticationResult.AccessToken;
         var valitedToken = tokenHandler.ReadToken(accessToken);
         var tokenList = RemoveSpecialCharacters(valitedToken.ToString()!).Split(',');
-        return "Accesstoken:" + accessToken + tokenList?[2].ToString();
+        context.Logger.LogInformation("Token:" + tokenList?[2].Substring(7));
+        var response = new Document { { "AccesToken", accessToken }, { "Uuid", tokenList?[2].Substring(7).Trim() } }.ToJsonPretty();
+        return response;
     }
     private string RemoveSpecialCharacters(string str)
     {
@@ -250,13 +253,13 @@ public class Functions
     {
         context.Logger.LogInformation("Get Request\n");
         var requestBody = JsonSerializer.Deserialize<Dictionary<string, string>>(request.Body.ToString());
-        context.Logger.LogInformation("Username:" + requestBody?["username"] + " Password:" + requestBody?["password"] + " ClientId:" + requestBody?["clientId"]);
-        if (requestBody != null && requestBody.ContainsKey("username") && requestBody.ContainsKey("password") && requestBody.ContainsKey("clientId"))
+        context.Logger.LogInformation("Username:" + requestBody?["username"] + " Password:" + requestBody?["password"]);
+        if (requestBody != null && requestBody.ContainsKey("username") && requestBody.ContainsKey("password"))
         {
             var response = new APIGatewayProxyResponse
             {
                 StatusCode = (int)HttpStatusCode.OK,
-                Body = await CognitoLoginAsync(requestBody["username"], requestBody["password"], requestBody["clientId"], context),
+                Body = await CognitoLoginAsync(requestBody["username"], requestBody["password"], context),
                 Headers = getHeaders()
             };
             return response;

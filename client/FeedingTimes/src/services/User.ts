@@ -4,6 +4,14 @@ export type User = {
     [key: string]: string;
   };
 };
+export type UserLogin = {
+  username: string | null | undefined;
+  password: string | null | undefined;
+};
+export type loginAuthResponse = {
+  Accesstoken: string | null | undefined;
+  Uuid: string | null | undefined;
+};
 
 export type DbActivity = {
   activities: ActivityTypes[];

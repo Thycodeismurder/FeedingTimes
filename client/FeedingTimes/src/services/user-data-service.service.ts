@@ -8,7 +8,13 @@ import {
   groupActivitiesByDay,
 } from 'src/app/shared/functions/groupActivitiesByTime';
 import { Activity, TimeFrame } from './Activity';
-import { ActivityTypes, DbActivity, User } from './User';
+import {
+  ActivityTypes,
+  DbActivity,
+  User,
+  UserLogin,
+  loginAuthResponse,
+} from './User';
 
 const apiEndPoint =
   'https://v0zp9or438.execute-api.eu-west-1.amazonaws.com/Prod/';
@@ -30,7 +36,13 @@ export class UserDataServiceService {
   constructor(private httpClient: HttpClient) {
     this.transformEventData = new TransformEventDataPipe();
   }
-
+  loginUser(userLogin: UserLogin): Observable<loginAuthResponse> {
+    const response = this.httpClient.post<loginAuthResponse>(
+      apiEndPoint + 'feedingtimes/login',
+      JSON.stringify(userLogin)
+    );
+    return response;
+  }
   getUserData(): Observable<User> {
     const response = this.httpClient.get<User>(
       apiEndPoint + 'feedingtimes/user'
