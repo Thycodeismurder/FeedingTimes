@@ -45,6 +45,7 @@ Deploy application
     cd "service/src/service"
     dotnet lambda deploy-serverless
     dotnet lambda deploy-serverless --region eu-west-1 --stack-name FeedingTimes --s3-bucket feedingtimes
+    dotnet-lambda should also work as prefix for command
 ```
 
 ## Arm64
