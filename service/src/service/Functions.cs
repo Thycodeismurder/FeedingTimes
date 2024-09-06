@@ -117,7 +117,7 @@ public class Functions
         user.SignOut();
         return "User sign out successfully";
     }
-    private async Task<string> QueryCalendarData()
+    private async Task<string> QueryCalendarData(string userUUID)
     {
         using var client = new AmazonDynamoDBClient(RegionEndpoint.EUWest1);
         var response = await client.QueryAsync(new QueryRequest
@@ -125,7 +125,7 @@ public class Functions
             TableName = "CalendarData",
             KeyConditionExpression = "UserUUID = :v_UserUUID",
             ExpressionAttributeValues = new Dictionary<string, AttributeValue> {
-                {":v_UserUUID", new AttributeValue{S = "aa1c6070-f8d9-4739-88db-dc1b5cff1efe"}}
+                {":v_UserUUID", new AttributeValue{S = userUUID}}
             }
         });
         List<Document> document = new List<Document>();
@@ -135,7 +135,7 @@ public class Functions
         }
         return document.ToJsonPretty();
     }
-    private async Task<string> QueryUserData()
+    private async Task<string> QueryUserData(string userUUID)
     {
         using var client = new AmazonDynamoDBClient(RegionEndpoint.EUWest1);
         var response = await client.QueryAsync(new QueryRequest
@@ -143,7 +143,7 @@ public class Functions
             TableName = "User",
             KeyConditionExpression = "UserUUID = :v_UserUUID",
             ExpressionAttributeValues = new Dictionary<string, AttributeValue> {
-                {":v_UserUUID", new AttributeValue{S = "aa1c6070-f8d9-4739-88db-dc1b5cff1efe"}}
+                {":v_UserUUID", new AttributeValue{S = userUUID}}
             }
         });
         List<Document> document = new List<Document>();
@@ -153,7 +153,7 @@ public class Functions
         }
         return document[0].ToJsonPretty();
     }
-    private async Task<string> PostFeedingAsync(string type, string time, string quantity, string icon, string date)
+    private async Task<string> PostFeedingAsync(string type, string time, string quantity, string icon, string date, string userUUID)
     {
         using var client = new AmazonDynamoDBClient(RegionEndpoint.EUWest1);
         try
@@ -161,7 +161,7 @@ public class Functions
             var response = await client.UpdateItemAsync(new UpdateItemRequest
             {
                 TableName = "CalendarData",
-                Key = new Dictionary<string, AttributeValue> { { "UserUUID", new AttributeValue { S = "aa1c6070-f8d9-4739-88db-dc1b5cff1efe" } }, { "Date", new AttributeValue { S = date } } },
+                Key = new Dictionary<string, AttributeValue> { { "UserUUID", new AttributeValue { S = userUUID } }, { "Date", new AttributeValue { S = date } } },
                 UpdateExpression = "SET #list = list_append(#list, :vals)",
                 ExpressionAttributeNames = { { "#list", "activities" } },
                 ExpressionAttributeValues = new Dictionary<string, AttributeValue> {
@@ -278,28 +278,57 @@ public class Functions
     public async Task<APIGatewayProxyResponse> GetUserData(APIGatewayProxyRequest request, ILambdaContext context)
     {
         context.Logger.LogInformation("Get Request\n");
-
-        var response = new APIGatewayProxyResponse
+        var Authorization = JsonSerializer.Deserialize<string>(request.Headers["Authorization"].ToString());
+        context.Logger.LogInformation("Authorization:" + Authorization);
+        if (Authorization != null)
         {
-            StatusCode = (int)HttpStatusCode.OK,
-            Body = await QueryUserData(),
-            Headers = getHeaders()
-        };
+            var response = new APIGatewayProxyResponse
+            {
+                StatusCode = (int)HttpStatusCode.OK,
+                Body = await QueryUserData(Authorization),
+                Headers = getHeaders()
+            };
 
-        return response;
+            return response;
+        }
+        else
+        {
+            var response = new APIGatewayProxyResponse
+            {
+                StatusCode = (int)HttpStatusCode.BadRequest,
+                Body = "Body of request not found!",
+                Headers = getHeaders()
+            };
+            return response;
+        }
     }
     public async Task<APIGatewayProxyResponse> GetCalendarData(APIGatewayProxyRequest request, ILambdaContext context)
     {
         context.Logger.LogInformation("Get Request\n");
-
+        var Authorization = JsonSerializer.Deserialize<string>(request.Headers["Authorization"].ToString());
+        context.Logger.LogInformation("Authorization:" + Authorization);
+        if (Authorization != null)
+        {
         var response = new APIGatewayProxyResponse
         {
             StatusCode = (int)HttpStatusCode.OK,
-            Body = await QueryCalendarData(),
+            Body = await QueryCalendarData( Authorization),
             Headers = getHeaders()
         };
-
         return response;
+        } else {
+            var response = new APIGatewayProxyResponse
+            {
+                StatusCode = (int)HttpStatusCode.BadRequest,
+                Body = "Body of request not found!",
+                Headers = getHeaders()
+            };
+            return response;
+        }
+    }
+
+    public class requestData {
+        public string? userUUID { get; set; }
     }
 
     public class ActivityData
@@ -308,13 +337,14 @@ public class Functions
         public string? quantity { get; set; }
         public string? type { get; set; }
         public string? icon { get; set; }
+        public string? userUUID { get; set; }
     }
     public async Task<APIGatewayProxyResponse> PostFeeding(APIGatewayProxyRequest request, ILambdaContext context)
     {
         context.Logger.LogInformation("Get Request\n");
         var requestBody = JsonSerializer.Deserialize<ActivityData>(request.Body.ToString());
         context.Logger.LogInformation("time:" + requestBody?.time + " quantity:" + requestBody?.quantity + "Type:" + requestBody?.type + "Icon:" + requestBody?.icon);
-        if (requestBody != null && requestBody.icon != null && requestBody.time != null && requestBody.quantity != null && requestBody.type != null)
+        if (requestBody != null && requestBody.icon != null && requestBody.time != null && requestBody.quantity != null && requestBody.type != null && requestBody.userUUID != null)
         {
             DateTime dateTime;
             DateTime.TryParseExact(requestBody.time, "yyyy-MM-ddTHH:mm", null, System.Globalization.DateTimeStyles.None, out dateTime);
@@ -322,7 +352,7 @@ public class Functions
             var response = new APIGatewayProxyResponse
             {
                 StatusCode = (int)HttpStatusCode.OK,
-                Body = await PostFeedingAsync(requestBody.type, requestBody.time, requestBody.quantity, requestBody.icon, dateTime.Date.ToString("d")),
+                Body = await PostFeedingAsync(requestBody.type, requestBody.time, requestBody.quantity, requestBody.icon, dateTime.Date.ToString("d"), requestBody.userUUID),
                 Headers = getHeaders()
             };
             return response;
