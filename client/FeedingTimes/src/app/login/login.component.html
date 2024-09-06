@@ -1,3 +1,6 @@
+<div *ngIf="user">
+  Tervetuloa {{ user.Parents }}!
+</div>
 <form class="login-form">
   <mat-form-field class="login-full-width">
     <mat-label>username</mat-label>
@@ -34,7 +37,7 @@
     }
   </mat-form-field>
   <div>
-    <button (click)="submitForm()" mat-raised-button>
+    <button (click)="submitForm()" mat-raised-button [disabled]="loading">
       Login <mat-icon>login</mat-icon>
     </button>
   </div>

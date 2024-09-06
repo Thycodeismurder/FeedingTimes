@@ -2,7 +2,7 @@ export type User = {
   UserUUID: string | null | undefined;
   Parents: {
     [key: string]: string;
-  };
+  } | undefined;
 };
 export type UserLogin = {
   username: string | null | undefined;

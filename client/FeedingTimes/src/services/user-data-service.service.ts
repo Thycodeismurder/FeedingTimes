@@ -18,10 +18,10 @@ import {
 
 const apiEndPoint =
   'https://v0zp9or438.execute-api.eu-west-1.amazonaws.com/Prod/';
-const httpOptions = {
+let httpOptions = {
   headers: new HttpHeaders({ Origin: 'http:://localhost:4200' }),
 };
-httpOptions.headers.append('Content-Type', 'text/plain');
+httpOptions.headers = httpOptions.headers.append('Content-Type', 'text/plain');
 @Injectable({
   providedIn: 'root',
 })
@@ -43,14 +43,21 @@ export class UserDataServiceService {
     );
     return response;
   }
+  setActicationToken(token: string) { httpOptions.headers = httpOptions.headers.delete('Authorization'); httpOptions.headers = httpOptions.headers.append('Authorization', token) } // userUUID need to be set as Authorization header later when token is implemented
   getUserData(): Observable<User> {
+    if (httpOptions.headers.has('Authorization')) {
     const response = this.httpClient.get<User>(
-      apiEndPoint + 'feedingtimes/user'
+      apiEndPoint + 'feedingtimes/user', {headers: httpOptions.headers}
     );
-    response.subscribe((data) => {
-      this.user = data;
-    });
-    return response;
+    return response; } else { 
+      const response = new Observable<User>((subscriber) => {
+        subscriber.error('no token');
+      });
+      return response;
+    }
+  }
+  setUser(user: User) {
+    this.user = user;
   }
   getUser(): User | undefined {
     return this.user;
