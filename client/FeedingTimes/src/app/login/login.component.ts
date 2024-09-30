@@ -11,6 +11,7 @@ export class LoginComponent {
   @Output() emitLogin = new EventEmitter();
   @Input() loading = false;
   @Input() user: User | undefined;
+
   usernameFormControl = new FormControl('', [Validators.required]);
   passwordFormControl = new FormControl('', [Validators.required]);
   matcher = new MyErrorStateMatcher();
@@ -27,5 +28,8 @@ export class LoginComponent {
       };
       this.emitLogin.emit(this.userLogin);
     }
+  }
+  getKeys(obj: any): string[] {
+    return Object.keys(obj);
   }
 }

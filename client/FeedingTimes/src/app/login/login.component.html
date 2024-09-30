@@ -1,44 +1,46 @@
-<div *ngIf="user">
-  Tervetuloa {{ user.Parents }}!
+<div *ngIf="user" class="login-text-container">
+  Tervetuloa <ng-container *ngFor="let key of getKeys(user.Parents)"><b>{{key}}:</b> {{user.Parents?.[key]}} </ng-container>!
 </div>
-<form class="login-form">
-  <mat-form-field class="login-full-width">
-    <mat-label>username</mat-label>
-    <input
-      type="username"
-      matInput
-      [formControl]="usernameFormControl"
-      [errorStateMatcher]="matcher"
-      placeholder="Ex. valontuoja"
-    />
-    <mat-hint>Errors appear instantly!</mat-hint>
-    @if (usernameFormControl.hasError('username') &&
-    !usernameFormControl.hasError('required')) {
-    <mat-error>Please enter a valid username address</mat-error>
-    } @if (usernameFormControl.hasError('required')) {
-    <mat-error>username is <strong>required</strong></mat-error>
-    }
-  </mat-form-field>
-  <mat-form-field class="login-full-width">
-    <mat-label>Password</mat-label>
-    <input
-      type="password"
-      matInput
-      [formControl]="passwordFormControl"
-      [errorStateMatcher]="matcher"
-      placeholder="********"
-    />
-    <mat-hint>Errors appear instantly!</mat-hint>
-    @if (passwordFormControl.hasError('password') &&
-    !passwordFormControl.hasError('required')) {
-    <mat-error>Please enter a valid password address</mat-error>
-    } @if (passwordFormControl.hasError('required')) {
-    <mat-error>password is <strong>required</strong></mat-error>
-    }
-  </mat-form-field>
-  <div>
-    <button (click)="submitForm()" mat-raised-button [disabled]="loading">
-      Login <mat-icon>login</mat-icon>
-    </button>
-  </div>
-</form>
+<div *ngIf="!user">
+  <form class="login-form">
+    <mat-form-field class="login-full-width">
+      <mat-label>username</mat-label>
+      <input
+        type="username"
+        matInput
+        [formControl]="usernameFormControl"
+        [errorStateMatcher]="matcher"
+        placeholder="Ex. valontuoja"
+      />
+      <mat-hint>Errors appear instantly!</mat-hint>
+      @if (usernameFormControl.hasError('username') &&
+      !usernameFormControl.hasError('required')) {
+      <mat-error>Please enter a valid username address</mat-error>
+      } @if (usernameFormControl.hasError('required')) {
+      <mat-error>username is <strong>required</strong></mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field class="login-full-width">
+      <mat-label>Password</mat-label>
+      <input
+        type="password"
+        matInput
+        [formControl]="passwordFormControl"
+        [errorStateMatcher]="matcher"
+        placeholder="********"
+      />
+      <mat-hint>Errors appear instantly!</mat-hint>
+      @if (passwordFormControl.hasError('password') &&
+      !passwordFormControl.hasError('required')) {
+      <mat-error>Please enter a valid password address</mat-error>
+      } @if (passwordFormControl.hasError('required')) {
+      <mat-error>password is <strong>required</strong></mat-error>
+      }
+    </mat-form-field>
+    <div>
+      <button (click)="submitForm()" mat-raised-button [disabled]="loading">
+        Login <mat-icon>login</mat-icon>
+      </button>
+    </div>
+  </form>
+</div>
