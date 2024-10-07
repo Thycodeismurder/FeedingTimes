@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { TransformEventDataPipe } from 'src/app/pipes/transform-event-data.pipe';
 import { filterActivitiesByTime } from 'src/app/shared/functions/filterActivitiesByTime';
 import {
@@ -27,7 +27,7 @@ httpOptions.headers = httpOptions.headers.append('Content-Type', 'text/plain');
 })
 export class UserDataServiceService {
   transformEventData: TransformEventDataPipe;
-  user: User | undefined;
+  private userSubject: BehaviorSubject<User | undefined> = new BehaviorSubject<User | undefined>(undefined);
   DbActivities: DbActivity[] | undefined;
   filteredActivities: Activity[] | undefined;
   groupedActivities: Activity[][] | undefined;
@@ -57,10 +57,10 @@ export class UserDataServiceService {
     }
   }
   setUser(user: User) {
-    this.user = user;
+    this.userSubject.next(user);
   }
-  getUser(): User | undefined {
-    return this.user;
+  getUser(): Observable<User | undefined> {
+    return this.userSubject.asObservable();
   }
   getActivitiesData(): Observable<DbActivity[]> {
     const response = this.httpClient.get<DbActivity[]>(
