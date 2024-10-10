@@ -19,6 +19,9 @@ body {
   border-radius: 4px;
   font-weight: bold;
 }
+div .mat-mdc-text-field-wrapper {
+  padding: 7px 0px 5px 0px;
+}
 
 .alert-danger {
   background-color: $red;
