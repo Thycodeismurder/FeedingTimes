@@ -1,6 +1,10 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, throwError } from 'rxjs';
 import { TransformEventDataPipe } from 'src/app/pipes/transform-event-data.pipe';
 import { filterActivitiesByTime } from 'src/app/shared/functions/filterActivitiesByTime';
 import {
@@ -27,7 +31,9 @@ httpOptions.headers = httpOptions.headers.append('Content-Type', 'text/plain');
 })
 export class UserDataServiceService {
   transformEventData: TransformEventDataPipe;
-  private userSubject: BehaviorSubject<User | undefined> = new BehaviorSubject<User | undefined>(undefined);
+  private userSubject: BehaviorSubject<User | undefined> = new BehaviorSubject<
+    User | undefined
+  >(undefined);
   DbActivities: DbActivity[] | undefined;
   filteredActivities: Activity[] | undefined;
   groupedActivities: Activity[][] | undefined;
@@ -37,19 +43,32 @@ export class UserDataServiceService {
     this.transformEventData = new TransformEventDataPipe();
   }
   loginUser(userLogin: UserLogin): Observable<loginAuthResponse> {
-    const response = this.httpClient.post<loginAuthResponse>(
-      apiEndPoint + 'feedingtimes/login',
-      JSON.stringify(userLogin)
-    );
+    const response = this.httpClient
+      .post<loginAuthResponse>(
+        apiEndPoint + 'feedingtimes/login',
+        JSON.stringify(userLogin)
+      )
+      .pipe(catchError(this.handleError));
     return response;
   }
-  setActicationToken(token: string) { httpOptions.headers = httpOptions.headers.delete('Authorization'); httpOptions.headers = httpOptions.headers.append('Authorization', token) } // userUUID need to be set as Authorization header later when token is implemented
+  private handleError(error: HttpErrorResponse): Observable<never> {
+    console.error('An error occurred', error);
+    return throwError(
+      () => 'Login failed; Please check your username and password.'
+    );
+  }
+  setActicationToken(token: string) {
+    httpOptions.headers = httpOptions.headers.delete('Authorization');
+    httpOptions.headers = httpOptions.headers.append('Authorization', token);
+  } // userUUID need to be set as Authorization header later when token is implemented
   getUserData(): Observable<User> {
     if (httpOptions.headers.has('Authorization')) {
-    const response = this.httpClient.get<User>(
-      apiEndPoint + 'feedingtimes/user', {headers: httpOptions.headers}
-    );
-    return response; } else { 
+      const response = this.httpClient.get<User>(
+        apiEndPoint + 'feedingtimes/user',
+        { headers: httpOptions.headers }
+      );
+      return response;
+    } else {
       const response = new Observable<User>((subscriber) => {
         subscriber.error('no token');
       });

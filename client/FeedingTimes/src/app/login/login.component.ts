@@ -11,6 +11,7 @@ export class LoginComponent {
   @Output() emitLogin = new EventEmitter();
   @Input() loading = false;
   @Input() user: User | undefined;
+  @Input() error: string | undefined;
 
   usernameFormControl = new FormControl('', [Validators.required]);
   passwordFormControl = new FormControl('', [Validators.required]);
@@ -22,6 +23,7 @@ export class LoginComponent {
   submitForm() {
     if (this.usernameFormControl.valid && this.passwordFormControl.valid) {
       this.loading = true;
+      this.error = undefined;
       this.userLogin = {
         username: this.usernameFormControl.value,
         password: this.passwordFormControl.value,

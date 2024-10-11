@@ -1,3 +1,4 @@
+@import '../../styles/styles.scss';
 .login-text-container {
   margin-top: 50px;
   text-align: center;
@@ -13,4 +14,9 @@
   .login-form-field {
     margin: 0 5px 0 5px;
   }
+.login-error {
+  color: $error-red;
+  font-weight: bold;
+  text-align: center;
+}
 

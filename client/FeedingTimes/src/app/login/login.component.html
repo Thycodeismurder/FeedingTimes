@@ -1,5 +1,8 @@
 <div *ngIf="user" class="login-text-container">
-  Tervetuloa <ng-container *ngFor="let key of getKeys(user.Parents)"><b>{{key}}:</b> {{user.Parents?.[key]}} </ng-container>!
+  Tervetuloa
+  <ng-container *ngFor="let key of getKeys(user.Parents)"
+    ><b>{{ key }}:</b> {{user.Parents?.[key]}} </ng-container
+  >!
 </div>
 <div *ngIf="!user">
   <form class="login-form">
@@ -41,4 +44,7 @@
       </button>
     </div>
   </form>
+  <div class="login-error">
+    {{ this.error }}
+  </div>
 </div>
