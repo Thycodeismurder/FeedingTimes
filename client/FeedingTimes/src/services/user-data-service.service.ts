@@ -4,7 +4,7 @@ import {
   HttpHeaders,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
 import { TransformEventDataPipe } from 'src/app/pipes/transform-event-data.pipe';
 import { filterActivitiesByTime } from 'src/app/shared/functions/filterActivitiesByTime';
 import {
@@ -16,9 +16,11 @@ import {
   ActivityTypes,
   DbActivity,
   User,
+  UserCache,
   UserLogin,
   loginAuthResponse,
 } from './User';
+import { UserCacheService } from './user-cache.service';
 
 const apiEndPoint =
   'https://v0zp9or438.execute-api.eu-west-1.amazonaws.com/Prod/';
@@ -39,24 +41,37 @@ export class UserDataServiceService {
   groupedActivities: Activity[][] | undefined;
   dateRange: TimeFrame = 'day';
   displayedDate: Date = new Date();
-  constructor(private httpClient: HttpClient) {
+  loginAuthResponse: loginAuthResponse | undefined;
+
+  constructor(
+    private httpClient: HttpClient,
+    private userCacheService: UserCacheService
+  ) {
     this.transformEventData = new TransformEventDataPipe();
   }
+
   loginUser(userLogin: UserLogin): Observable<loginAuthResponse> {
     const response = this.httpClient
       .post<loginAuthResponse>(
         apiEndPoint + 'feedingtimes/login',
         JSON.stringify(userLogin)
       )
-      .pipe(catchError(this.handleError));
+      .pipe(
+        tap((data) => {
+          this.loginAuthResponse = data;
+        }),
+        catchError(this.handleError)
+      );
     return response;
   }
+
   private handleError(error: HttpErrorResponse): Observable<never> {
     console.error('An error occurred', error);
     return throwError(
       () => 'Login failed; Please check your username and password.'
     );
   }
+
   setActicationToken(token: string) {
     httpOptions.headers = httpOptions.headers.delete('Authorization');
     httpOptions.headers = httpOptions.headers.append('Authorization', token);
@@ -75,19 +90,46 @@ export class UserDataServiceService {
       return response;
     }
   }
-  setUser(user: User) {
+
+  setUser(user: User | undefined) {
     this.userSubject.next(user);
+    user
+      ? this.setUserDataToCache({
+          userData: user,
+          Accesstoken: this.loginAuthResponse?.Accesstoken,
+          RefreshToken: '',
+          Uuid: this.loginAuthResponse?.Uuid,
+        })
+      : this.clearUserDataFromCache();
   }
+
   getUser(): Observable<User | undefined> {
+    this.setUser(this.getUserDataFromCache()?.userData);
     return this.userSubject.asObservable();
   }
+
+  setUserDataToCache(userData: UserCache) {
+    this.userCacheService.setUserData(userData);
+  }
+
+  getUserDataFromCache(): UserCache | null | undefined {
+    return this.userCacheService.getUserData();
+  }
+
+  clearUserDataFromCache() {
+    this.userCacheService.clearUserData();
+  }
+
   getActivitiesData(): Observable<DbActivity[]> {
-    const response = this.httpClient.get<DbActivity[]>(
-      apiEndPoint + 'feedingtimes/calendardata'
-    );
-    response.subscribe((data) => {
-      this.DbActivities = data;
-    });
+    const response = this.httpClient
+      .get<DbActivity[]>(apiEndPoint + 'feedingtimes/calendardata', {
+        headers: httpOptions.headers,
+      })
+      .pipe(
+        tap((data) => {
+          this.DbActivities = data;
+        })
+      );
     return response;
   }
   getActivities(): Activity[] | undefined {

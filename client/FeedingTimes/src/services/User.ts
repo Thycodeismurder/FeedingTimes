@@ -1,8 +1,10 @@
 export type User = {
   UserUUID: string | null | undefined;
-  Parents: {
-    [key: string]: string;
-  } | undefined;
+  Parents:
+    | {
+        [key: string]: string;
+      }
+    | undefined;
 };
 export type UserLogin = {
   username: string | null | undefined;
@@ -10,6 +12,13 @@ export type UserLogin = {
 };
 export type loginAuthResponse = {
   Accesstoken: string | null | undefined;
+  Uuid: string | null | undefined;
+};
+
+export type UserCache = {
+  userData: User;
+  Accesstoken: string | null | undefined;
+  RefreshToken: string | null | undefined;
   Uuid: string | null | undefined;
 };
 

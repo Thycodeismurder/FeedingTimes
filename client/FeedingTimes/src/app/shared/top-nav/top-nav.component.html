@@ -26,11 +26,22 @@
     </div>
   </div>
   <div class="top-nav-bar-right-content">
-    <div class="top-nav-bar-left-content-mother" *ngIf="this.user?.Parents?.['Mother']">
-      <h2>Mother: {{ this.user?.Parents?.['Mother'] }}</h2>
+    <div
+      class="top-nav-bar-right-content-text"
+      *ngIf="this.user?.Parents?.['Mother']"
+    >
+      Mother: {{ this.user?.Parents?.['Mother'] }}
     </div>
-    <div class="top-nav-bar-left-content-father" *ngIf="this.user?.Parents?.['Father']">
-      <h2>Father: {{ this.user?.Parents?.['Father'] }}</h2>
+    <div
+      class="top-nav-bar-right-content-text"
+      *ngIf="this.user?.Parents?.['Father']"
+    >
+      Father: {{ this.user?.Parents?.['Father'] }}
+    </div>
+    <div class="top-nav-bar-right-content-logout" *ngIf="this.user">
+      <button (click)="logout()" mat-raised-button>
+        Logout <mat-icon>logout</mat-icon>
+      </button>
     </div>
   </div>
 </div>
