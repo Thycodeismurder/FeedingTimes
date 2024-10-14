@@ -11,13 +11,13 @@ export type UserLogin = {
   password: string | null | undefined;
 };
 export type loginAuthResponse = {
-  Accesstoken: string | null | undefined;
+  AccesToken: string | null | undefined;
   Uuid: string | null | undefined;
 };
 
 export type UserCache = {
   userData: User;
-  Accesstoken: string | null | undefined;
+  AccesToken: string | null | undefined;
   RefreshToken: string | null | undefined;
   Uuid: string | null | undefined;
 };

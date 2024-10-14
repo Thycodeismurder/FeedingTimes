@@ -96,7 +96,7 @@ export class UserDataServiceService {
     user
       ? this.setUserDataToCache({
           userData: user,
-          Accesstoken: this.loginAuthResponse?.Accesstoken,
+          AccesToken: this.loginAuthResponse?.AccesToken,
           RefreshToken: '',
           Uuid: this.loginAuthResponse?.Uuid,
         })
@@ -120,7 +120,16 @@ export class UserDataServiceService {
     this.userCacheService.clearUserData();
   }
 
+  checkAccessTokenHeader(): boolean {
+    return httpOptions.headers.has('Authorization');
+  }
+
   getActivitiesData(): Observable<DbActivity[]> {
+    if (!this.checkAccessTokenHeader()) {
+      this.getUserDataFromCache()?.AccesToken
+        ? this.setActicationToken(this.getUserDataFromCache()?.AccesToken!)
+        : console.log('no token');
+    }
     const response = this.httpClient
       .get<DbActivity[]>(apiEndPoint + 'feedingtimes/calendardata', {
         headers: httpOptions.headers,
