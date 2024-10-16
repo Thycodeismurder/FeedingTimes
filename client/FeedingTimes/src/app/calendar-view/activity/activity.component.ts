@@ -8,7 +8,12 @@ import { Activity } from 'src/services/Activity';
 })
 export class ActivityComponent implements OnInit {
   @Input() activity: Activity | undefined | null;
+  showActivity: boolean = true;
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.activity?.type === 'empty') {
+      this.showActivity = false;
+    }
+  }
 }

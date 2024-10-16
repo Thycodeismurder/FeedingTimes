@@ -75,7 +75,8 @@ export class UserDataServiceService {
   setActicationToken(token: string) {
     httpOptions.headers = httpOptions.headers.delete('Authorization');
     httpOptions.headers = httpOptions.headers.append('Authorization', token);
-  } // userUUID need to be set as Authorization header later when token is implemented
+  }
+
   getUserData(): Observable<User> {
     if (httpOptions.headers.has('Authorization')) {
       const response = this.httpClient.get<User>(
@@ -104,7 +105,7 @@ export class UserDataServiceService {
   }
 
   getUser(): Observable<User | undefined> {
-    this.setUser(this.getUserDataFromCache()?.userData);
+    this.userSubject.next(this.getUserDataFromCache()?.userData);
     return this.userSubject.asObservable();
   }
 
@@ -141,6 +142,7 @@ export class UserDataServiceService {
       );
     return response;
   }
+
   getActivities(): Activity[] | undefined {
     if (this.DbActivities) {
       let activities: Activity[] = [];
@@ -156,6 +158,7 @@ export class UserDataServiceService {
       return activities;
     } else return [{ type: '', info: '', time: '', iconPath: '' }];
   }
+
   filterActivities(date: Date[]) {
     let activities = this.getActivities();
     this.filteredActivities = filterActivitiesByTime(
@@ -166,6 +169,7 @@ export class UserDataServiceService {
     this.sortActivities(this.filteredActivities);
     this.displayedDate = date[0];
   }
+
   createGroupedActivities(): Promise<Activity[][]> {
     this.groupedActivities = createActivitiesOnEmptydays(
       groupActivitiesByDay(
@@ -179,6 +183,7 @@ export class UserDataServiceService {
     });
     return response;
   }
+
   sortActivities(activities: Activity[]): Activity[] | undefined {
     this.filteredActivities = this.filteredActivities?.sort((a, b) => {
       return +new Date(a!.time) - +new Date(b!.time);
@@ -188,6 +193,7 @@ export class UserDataServiceService {
   dateRangeChanged(daterange: TimeFrame) {
     this.dateRange = daterange;
   }
+
   postActivity(activity: ActivityTypes): Observable<{}> {
     if (activity.type === 'Feeding' && 'quantity' in activity) {
       const response = this.httpClient.post(
@@ -197,7 +203,8 @@ export class UserDataServiceService {
             return String(value);
           }
           return value;
-        })
+        }),
+        { headers: httpOptions.headers }
       );
       return response;
     } else if (
@@ -211,7 +218,8 @@ export class UserDataServiceService {
             return String(value);
           }
           return value;
-        })
+        }),
+        { headers: httpOptions.headers }
       );
       return response;
     } else {

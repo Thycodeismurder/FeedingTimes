@@ -10,7 +10,7 @@ import { Activity } from 'src/services/Activity';
 export class WeekComponent implements OnInit {
   @Input() activities: Activity[] | undefined;
   @Input() showMonth: boolean = true;
-  groupedActivities: Activity[][] | undefined;
+  groupedActivitiesByDay: Activity[][] | undefined;
   constructor() {}
 
   ngOnInit(): void {
@@ -21,7 +21,7 @@ export class WeekComponent implements OnInit {
     }
 
     // Grouping objects by the same day
-    this.groupedActivities = groupActivitiesByDay(
+    this.groupedActivitiesByDay = groupActivitiesByDay(
       this.activities ? this.activities : []
     );
   }

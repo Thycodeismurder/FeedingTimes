@@ -1,4 +1,4 @@
-<div class="activity">
+<div class="activity" *ngIf="showActivity">
   <img class="activity-svg" [src]="this.activity?.iconPath" />
   <div>
     {{ activity?.type }}
