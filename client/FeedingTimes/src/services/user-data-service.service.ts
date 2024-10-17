@@ -99,7 +99,7 @@ export class UserDataServiceService {
         apiEndPoint + 'feedingtimes/user',
         { headers: httpOptions.headers }
       );
-      return response;
+      return response.pipe(tap((data) => this.setUser(data)));
     } else {
       const response = new Observable<User>((subscriber) => {
         subscriber.error('no token');

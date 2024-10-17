@@ -31,14 +31,11 @@ export class FrontPageComponent implements OnInit {
         })
       )
       .subscribe(() => {
-        console.log('logged in');
         this.userDataService.getUserData().subscribe((data) => {
-          this.userDataService.setUser(data);
           this.userDataService
             .getUser()
             .subscribe((user) => (this.user = user));
           this.loginIsLoading = false;
-          console.log('user is', this.user);
         });
       });
   }
