@@ -30,10 +30,8 @@ export class FrontPageComponent implements OnInit {
           return of(null);
         })
       )
-      .subscribe((data) => {
-        data?.Uuid
-          ? this.userDataService.setActicationToken(data?.Uuid)
-          : console.log('no token at login');
+      .subscribe(() => {
+        console.log('logged in');
         this.userDataService.getUserData().subscribe((data) => {
           this.userDataService.setUser(data);
           this.userDataService

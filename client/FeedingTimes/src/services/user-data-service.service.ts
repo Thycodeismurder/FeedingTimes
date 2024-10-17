@@ -59,6 +59,15 @@ export class UserDataServiceService {
       .pipe(
         tap((data) => {
           this.loginAuthResponse = data;
+          this.setUserDataToCache({
+            userData: {
+              UserUUID: data.Uuid,
+              Parents: undefined,
+            },
+            AccesToken: data.AccesToken,
+            RefreshToken: '',
+            Uuid: data.Uuid,
+          });
         }),
         catchError(this.handleError)
       );
@@ -77,8 +86,15 @@ export class UserDataServiceService {
     httpOptions.headers = httpOptions.headers.append('Authorization', token);
   }
 
+  checkAndSetAccessTokenHeader() {
+    !this.checkAccessTokenHeader()
+      ? this.setActicationToken(this.getUserDataFromCache()?.AccesToken!)
+      : console.log('no token');
+  }
+
   getUserData(): Observable<User> {
-    if (httpOptions.headers.has('Authorization')) {
+    this.checkAndSetAccessTokenHeader();
+    if (this.checkAccessTokenHeader()) {
       const response = this.httpClient.get<User>(
         apiEndPoint + 'feedingtimes/user',
         { headers: httpOptions.headers }

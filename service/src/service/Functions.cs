@@ -153,7 +153,7 @@ public class Functions
         }
         return document[0].ToJsonPretty();
     }
-    private async Task<string> PostFeedingAsync(string type, string time, string quantity, string icon, string date, string userUUID)
+    private async Task<string> PostFeedingAsync(string type, string time, string quantity, string icon, string date, string? userUUID)
     {
         using var client = new AmazonDynamoDBClient(RegionEndpoint.EUWest1);
         try
@@ -278,25 +278,28 @@ public class Functions
     public async Task<APIGatewayProxyResponse> GetUserData(APIGatewayProxyRequest request, ILambdaContext context)
     {
         context.Logger.LogInformation("Get Request\n");
-        var Authorization = JsonSerializer.Deserialize<string>(request.Headers["Authorization"].ToString());
-        context.Logger.LogInformation("Authorization:" + Authorization);
+        var Authorization = request.Headers["Authorization"];
         if (Authorization != null)
         {
+            var user = await getUserFromCognitoWithToken(Authorization);
+            var userUUID = user.UserAttributes[2].Value;
+            context.Logger.LogInformation("Authorization:" + Authorization);
+            context.Logger.LogInformation("userUUID: " + userUUID);
             var response = new APIGatewayProxyResponse
             {
                 StatusCode = (int)HttpStatusCode.OK,
-                Body = await QueryUserData(Authorization),
+                Body = await QueryUserData(userUUID),
                 Headers = getHeaders()
             };
-
             return response;
+
         }
         else
         {
             var response = new APIGatewayProxyResponse
             {
                 StatusCode = (int)HttpStatusCode.BadRequest,
-                Body = "Body of request not found!",
+                Body = "Authorization header not found!",
                 Headers = getHeaders()
             };
             return response;
@@ -305,30 +308,33 @@ public class Functions
     public async Task<APIGatewayProxyResponse> GetCalendarData(APIGatewayProxyRequest request, ILambdaContext context)
     {
         context.Logger.LogInformation("Get Request\n");
-        var Authorization = JsonSerializer.Deserialize<string>(request.Headers["Authorization"].ToString());
-        context.Logger.LogInformation("Authorization:" + Authorization);
+        var Authorization = request.Headers["Authorization"];
         if (Authorization != null)
         {
-        var response = new APIGatewayProxyResponse
-        {
-            StatusCode = (int)HttpStatusCode.OK,
-            Body = await QueryCalendarData( Authorization),
-            Headers = getHeaders()
-        };
-        return response;
-        } else {
+
+            var user = await getUserFromCognitoWithToken(Authorization);
+            var userUUID = user.UserAttributes[2].Value;
+            context.Logger.LogInformation("Authorization: " + Authorization);
+            context.Logger.LogInformation("userUUID: " + userUUID);
             var response = new APIGatewayProxyResponse
             {
-                StatusCode = (int)HttpStatusCode.BadRequest,
-                Body = "Body of request not found!",
+                StatusCode = (int)HttpStatusCode.OK,
+                Body = await QueryCalendarData(userUUID),
                 Headers = getHeaders()
             };
             return response;
         }
-    }
+        else
+        {
+            var response = new APIGatewayProxyResponse
+            {
+                StatusCode = (int)HttpStatusCode.BadRequest,
+                Body = "Authorization header not found!",
+                Headers = getHeaders()
+            };
+            return response;
 
-    public class requestData {
-        public string? userUUID { get; set; }
+        }
     }
 
     public class ActivityData
@@ -337,22 +343,44 @@ public class Functions
         public string? quantity { get; set; }
         public string? type { get; set; }
         public string? icon { get; set; }
-        public string? userUUID { get; set; }
+    }
+    public async Task<GetUserResponse> getUserFromCognitoWithToken(string token)
+    {
+        var cognito = new AmazonCognitoIdentityProviderClient(RegionEndpoint.EUWest1);
+        var request = new GetUserRequest
+        {
+            AccessToken = token
+        };
+
+        try
+        {
+            var response = await cognito.GetUserAsync(request);
+            return response;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("An error occurred: " + ex.Message);
+            throw;
+        }
     }
     public async Task<APIGatewayProxyResponse> PostFeeding(APIGatewayProxyRequest request, ILambdaContext context)
     {
         context.Logger.LogInformation("Get Request\n");
         var requestBody = JsonSerializer.Deserialize<ActivityData>(request.Body.ToString());
         context.Logger.LogInformation("time:" + requestBody?.time + " quantity:" + requestBody?.quantity + "Type:" + requestBody?.type + "Icon:" + requestBody?.icon);
-        if (requestBody != null && requestBody.icon != null && requestBody.time != null && requestBody.quantity != null && requestBody.type != null && requestBody.userUUID != null)
+        var Authorization = request.Headers["Authorization"];
+        if (requestBody != null && requestBody.icon != null && requestBody.time != null && requestBody.quantity != null && requestBody.type != null && Authorization != null)
         {
+            var user = await getUserFromCognitoWithToken(Authorization);
+            var UUID = user.UserAttributes[2].Value;
+            context.Logger.LogInformation("UUID:" + UUID);
             DateTime dateTime;
             DateTime.TryParseExact(requestBody.time, "yyyy-MM-ddTHH:mm", null, System.Globalization.DateTimeStyles.None, out dateTime);
             context.Logger.LogInformation("dateTime:" + dateTime.ToString());
             var response = new APIGatewayProxyResponse
             {
                 StatusCode = (int)HttpStatusCode.OK,
-                Body = await PostFeedingAsync(requestBody.type, requestBody.time, requestBody.quantity, requestBody.icon, dateTime.Date.ToString("d"), requestBody.userUUID),
+                Body = await PostFeedingAsync(requestBody.type, requestBody.time, requestBody.quantity, requestBody.icon, dateTime.Date.ToString("d"), UUID),
                 Headers = getHeaders()
             };
             return response;

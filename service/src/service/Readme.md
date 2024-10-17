@@ -45,6 +45,7 @@ Deploy application
     cd "service/src/service"
     dotnet lambda deploy-serverless
     dotnet-lambda deploy-serverless --region eu-west-1 --stack-name FeedingTimes --s3-bucket feedingtimes
+    does not work: dotnet lambda deploy-function PostFeeding --region eu-west-1 --function-role FeedingTimes-PostFeedingRole-k1ALsWOf2NiA --function-handler service::service.Functions::PostFeeding --function-memory-size 5000 --function-timeout 30 --s3-bucket feedingtimes
     dotnet-lambda should also work as prefix for command
 ```
 
