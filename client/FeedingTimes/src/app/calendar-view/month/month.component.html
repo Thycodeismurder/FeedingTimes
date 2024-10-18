@@ -1,5 +1,6 @@
 <div class="month">
-  <div class="month-activity" *ngFor="let activities of this.activities">
-    <app-week [showMonth]="false" [activities]="activities"> </app-week>
+  <div class="month-activity">
+    <app-week [showMonth]="false" [calendarData]="this.calendarData">
+    </app-week>
   </div>
 </div>

@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Activity } from 'src/services/Activity';
+import { CalendarData } from 'src/services/User';
 
 @Component({
   selector: 'app-day',
@@ -7,18 +8,19 @@ import { Activity } from 'src/services/Activity';
   styleUrls: ['./day.component.scss'],
 })
 export class DayComponent implements OnInit {
-  @Input() activities: (Activity | null | undefined)[] | undefined;
+  @Input() calendarData: CalendarData | undefined;
   @Input() showDate: boolean = true;
+  activities: Activity[] = [];
   isCurrentDay: boolean = false;
   constructor() {}
   ngOnInit(): void {
-    if (this.activities) {
-      this.activities = this.activities?.sort((a, b) => {
-        return +new Date(a!.time) - +new Date(b!.time);
+    if (this.calendarData) {
+      this.activities = this.calendarData?.activities.sort((a, b) => {
+        return +new Date(a!.date) - +new Date(b!.date);
       });
     }
     this.isCurrentDay =
       new Date().toISOString().split('T')[0] ===
-      new Date(this.activities?.[0]?.time!).toISOString().split('T')[0];
+      new Date(this.calendarData?.[0]?.date!).toISOString().split('T')[0];
   }
 }

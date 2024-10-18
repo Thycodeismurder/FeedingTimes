@@ -22,10 +22,10 @@ export type UserCache = {
   Uuid: string | null | undefined;
 };
 
-export type DbActivity = {
+export type CalendarData = {
   activities: ActivityTypes[];
-  Date: string;
-  UserUUID: string;
+  date: string;
+  userUUID: string;
 };
 export type ActivityTypes = UserEvent | Feeding;
 

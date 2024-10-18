@@ -6,7 +6,7 @@ import {
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
 import { TransformEventDataPipe } from 'src/app/pipes/transform-event-data.pipe';
-import { filterActivitiesByTime } from 'src/app/shared/functions/filterActivitiesByTime';
+import { filterCalendarDataByTime } from 'src/app/shared/functions/filterCalendarDataByTime';
 import {
   createActivitiesOnEmptydays,
   groupActivitiesByDay,
@@ -14,11 +14,11 @@ import {
 import { Activity, TimeFrame } from './Activity';
 import {
   ActivityTypes,
-  DbActivity,
+  CalendarData,
+  loginAuthResponse,
   User,
   UserCache,
   UserLogin,
-  loginAuthResponse,
 } from './User';
 import { UserCacheService } from './user-cache.service';
 
@@ -36,9 +36,8 @@ export class UserDataServiceService {
   private userSubject: BehaviorSubject<User | undefined> = new BehaviorSubject<
     User | undefined
   >(undefined);
-  DbActivities: DbActivity[] | undefined;
-  filteredActivities: Activity[] | undefined;
-  groupedActivities: Activity[][] | undefined;
+  calendarData: CalendarData[] | undefined;
+  filteredCalendarData: CalendarData[] | undefined;
   dateRange: TimeFrame = 'day';
   displayedDate: Date = new Date();
   loginAuthResponse: loginAuthResponse | undefined;
@@ -141,70 +140,45 @@ export class UserDataServiceService {
     return httpOptions.headers.has('Authorization');
   }
 
-  getActivitiesData(): Observable<DbActivity[]> {
+  getCalendarData(): Observable<CalendarData[]> {
     if (!this.checkAccessTokenHeader()) {
       this.getUserDataFromCache()?.AccesToken
         ? this.setActicationToken(this.getUserDataFromCache()?.AccesToken!)
         : console.log('no token');
     }
     const response = this.httpClient
-      .get<DbActivity[]>(apiEndPoint + 'feedingtimes/calendardata', {
+      .get<CalendarData[]>(apiEndPoint + 'feedingtimes/calendardata', {
         headers: httpOptions.headers,
       })
       .pipe(
         tap((data) => {
-          this.DbActivities = data;
+          this.calendarData = data;
         })
       );
     return response;
   }
 
-  getActivities(): Activity[] | undefined {
-    if (this.DbActivities) {
-      let activities: Activity[] = [];
-      this.DbActivities.forEach((DbActivity) => {
-        activities = activities.concat(
-          DbActivity
-            ? DbActivity.activities.map((activity) =>
-                this.transformEventData.transform(activity)
-              )
-            : [{ type: '', info: '', time: '', iconPath: '' }]
-        );
-      });
-      return activities;
-    } else return [{ type: '', info: '', time: '', iconPath: '' }];
-  }
-
-  filterActivities(date: Date[]) {
-    let activities = this.getActivities();
-    this.filteredActivities = filterActivitiesByTime(
-      activities ? activities : [],
+  filterCalendarData(date: Date[]): Promise<CalendarData[]> {
+    this.filteredCalendarData = filterCalendarDataByTime(
+      this.calendarData ? this.calendarData : [],
       date,
       this.dateRange
     );
-    this.sortActivities(this.filteredActivities);
+    this.filteredCalendarData
+      ? this.sortActivities(this.filteredCalendarData)
+      : console.log('no data');
     this.displayedDate = date[0];
-  }
-
-  createGroupedActivities(): Promise<Activity[][]> {
-    this.groupedActivities = createActivitiesOnEmptydays(
-      groupActivitiesByDay(
-        this.filteredActivities ? this.filteredActivities : []
-      ),
-      this.displayedDate,
-      this.dateRange
-    );
-    const response = new Promise<Activity[][]>((resolve) => {
-      resolve(this.groupedActivities ? this.groupedActivities : []);
+    const response = new Promise<CalendarData[]>((resolve) => {
+      resolve(this.filteredCalendarData ? this.filteredCalendarData : []);
     });
     return response;
   }
 
-  sortActivities(activities: Activity[]): Activity[] | undefined {
-    this.filteredActivities = this.filteredActivities?.sort((a, b) => {
-      return +new Date(a!.time) - +new Date(b!.time);
+  sortActivities(activities: CalendarData[]): CalendarData[] | undefined {
+    this.filteredCalendarData = this.filteredCalendarData?.sort((a, b) => {
+      return +new Date(a!.date) - +new Date(b!.date);
     });
-    return this.filteredActivities;
+    return this.filteredCalendarData;
   }
   dateRangeChanged(daterange: TimeFrame) {
     this.dateRange = daterange;

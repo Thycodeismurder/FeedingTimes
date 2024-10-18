@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Activity } from 'src/services/Activity';
+import { CalendarData } from 'src/services/User';
 
 @Component({
   selector: 'app-month',
@@ -7,7 +7,7 @@ import { Activity } from 'src/services/Activity';
   styleUrls: ['./month.component.scss'],
 })
 export class MonthComponent implements OnInit {
-  @Input() activities: Activity[][] | undefined;
+  @Input() calendarData: CalendarData[] | undefined;
   @Input() date: Date = new Date();
   constructor() {}
 

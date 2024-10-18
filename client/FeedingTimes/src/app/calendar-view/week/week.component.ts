@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { groupActivitiesByDay } from 'src/app/shared/functions/groupActivitiesByTime';
 import { Activity } from 'src/services/Activity';
+import { CalendarData } from 'src/services/User';
 
 @Component({
   selector: 'app-week',
@@ -8,21 +9,15 @@ import { Activity } from 'src/services/Activity';
   styleUrls: ['./week.component.scss'],
 })
 export class WeekComponent implements OnInit {
-  @Input() activities: Activity[] | undefined;
+  @Input() calendarData: CalendarData[] | undefined;
   @Input() showMonth: boolean = true;
-  groupedActivitiesByDay: Activity[][] | undefined;
   constructor() {}
 
   ngOnInit(): void {
-    if (this.activities) {
-      this.activities = this.activities?.sort((a, b) => {
-        return +new Date(a!.time) - +new Date(b!.time);
+    if (this.calendarData) {
+      this.calendarData = this.calendarData?.sort((a, b) => {
+        return +new Date(a!.date) - +new Date(b!.date);
       });
     }
-
-    // Grouping objects by the same day
-    this.groupedActivitiesByDay = groupActivitiesByDay(
-      this.activities ? this.activities : []
-    );
   }
 }

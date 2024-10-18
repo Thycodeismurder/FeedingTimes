@@ -1,21 +1,21 @@
-import { Activity, TimeFrame } from 'src/services/Activity';
-import { createFiveDayRange } from './groupActivitiesByTime';
+import { TimeFrame } from 'src/services/Activity';
+import { CalendarData } from 'src/services/User';
 
-export function filterActivitiesByTime(
-  activities: Activity[],
+export function filterCalendarDataByTime(
+  calendarData: CalendarData[],
   time: Date[],
   dateRange: TimeFrame
-): Activity[] {
+): CalendarData[] {
   if (time[1] === undefined) {
     if (dateRange === 'day') {
-      return activities.filter(
-        (activity) =>
-          new Date(activity.time).toDateString() === time[0].toDateString()
+      return calendarData.filter(
+        (calendarData) =>
+          new Date(calendarData.date).toDateString() === time[0].toDateString()
       );
     } else if (dateRange === 'month') {
-      return activities.filter(
-        (activity) =>
-          new Date(activity.time).toLocaleDateString('en-EN', {
+      return calendarData.filter(
+        (calendarData) =>
+          new Date(calendarData.date).toLocaleDateString('en-EN', {
             year: 'numeric',
             month: 'numeric',
           }) ===
@@ -28,25 +28,25 @@ export function filterActivitiesByTime(
       console.log(
         'Error: filterActivitiesByTime: invalid dateRange, at singe daterange'
       );
-      return activities;
+      return calendarData;
     }
   } else {
     if (dateRange === 'day') {
-      return activities.filter(
-        (activity) =>
-          new Date(activity.time).toDateString() === time[0].toDateString()
+      return calendarData.filter(
+        (calendarData) =>
+          new Date(calendarData.date).toDateString() === time[0].toDateString()
       );
     } else if (dateRange === 'week') {
-      return activities.filter((activity) => {
+      return calendarData.filter((calendarData) => {
         return (
-          new Date(activity.time).getTime() >= time[0].getTime() &&
-          new Date(activity.time).getTime() <= time[1].getTime()
+          new Date(calendarData.date).getTime() >= time[0].getTime() &&
+          new Date(calendarData.date).getTime() <= time[1].getTime()
         );
       });
     } else if (dateRange === 'month') {
-      return activities.filter(
-        (activity) =>
-          new Date(activity.time).toLocaleDateString('en-EN', {
+      return calendarData.filter(
+        (calendarData) =>
+          new Date(calendarData.date).toLocaleDateString('en-EN', {
             year: 'numeric',
             month: 'numeric',
           }) >=
@@ -54,7 +54,7 @@ export function filterActivitiesByTime(
               year: 'numeric',
               month: 'numeric',
             }) &&
-          new Date(activity.time).toLocaleDateString('en-EN', {
+          new Date(calendarData.date).toLocaleDateString('en-EN', {
             year: 'numeric',
             month: 'numeric',
           }) <=
@@ -65,7 +65,7 @@ export function filterActivitiesByTime(
       );
     } else {
       console.log('Error: filterActivitiesByTime: invalid multiple dateRange');
-      return activities;
+      return calendarData;
     }
   }
 }

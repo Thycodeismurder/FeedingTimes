@@ -16,7 +16,7 @@
         {{ displayedDate | date : "MMMM" }}
       </div>
       <app-month
-        [activities]="this.groupedActivities"
+        [calendarData]="this.filteredCalendarData"
         [date]="displayedDate"
       ></app-month>
     </div>

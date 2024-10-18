@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Activity, TimeFrame } from 'src/services/Activity';
+import { CalendarData } from 'src/services/User';
 import { UserDataServiceService } from 'src/services/user-data-service.service';
 @Component({
   selector: 'app-calendar-view',
@@ -9,17 +10,18 @@ import { UserDataServiceService } from 'src/services/user-data-service.service';
 export class CalendarViewComponent implements OnInit {
   loading = true;
   displayedDate: Date = new Date();
-  groupedActivities: Activity[][] | undefined;
+  filteredCalendarData: CalendarData[] | undefined;
   dateRange: TimeFrame = 'day';
   constructor(private userDataService: UserDataServiceService) {}
 
   ngOnInit(): void {
-    this.userDataService.getActivitiesData().subscribe(() => {
+    this.userDataService.getCalendarData().subscribe(() => {
       this.loading = false;
-      this.userDataService.filterActivities([this.displayedDate]);
-    });
-    this.userDataService.createGroupedActivities().then((groupedActivities) => {
-      this.groupedActivities = groupedActivities;
+      this.userDataService
+        .filterCalendarData([this.displayedDate])
+        .then((filteredCalendarData) => {
+          this.filteredCalendarData = filteredCalendarData;
+        });
     });
   }
   setLoading(loading: boolean) {
@@ -31,11 +33,12 @@ export class CalendarViewComponent implements OnInit {
   }
   dateChanged(date: Date[]) {
     this.setLoading(true);
-    this.userDataService.filterActivities(date);
+    this.userDataService
+      .filterCalendarData(date)
+      .then((filteredCalendarData) => {
+        this.filteredCalendarData = filteredCalendarData;
+      });
     this.displayedDate = date[0];
-    this.userDataService.createGroupedActivities().then((groupedActivities) => {
-      this.groupedActivities = groupedActivities;
-    });
     this.setLoading(false);
   }
 }
