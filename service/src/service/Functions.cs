@@ -181,7 +181,7 @@ public class Functions
                 new PutItemRequest
                 {
                     TableName = "CalendarData",
-                    Item = {{"UserUUID", new AttributeValue { S = "aa1c6070-f8d9-4739-88db-dc1b5cff1efe"}}, {"Date", new AttributeValue {S = date}}, {"activities", new AttributeValue {L = new List<AttributeValue>() {new AttributeValue {M = new Dictionary<string, AttributeValue> {{"quantity", new AttributeValue {S = quantity}}, {"icon", new AttributeValue {S = icon}},
+                    Item = {{"UserUUID", new AttributeValue { S = userUUID}}, {"Date", new AttributeValue {S = date}}, {"activities", new AttributeValue {L = new List<AttributeValue>() {new AttributeValue {M = new Dictionary<string, AttributeValue> {{"quantity", new AttributeValue {S = quantity}}, {"icon", new AttributeValue {S = icon}},
                         {"time", new AttributeValue { S= time}}, {"type", new AttributeValue { S= type}}}}}}}}
                 }
             );
