@@ -1,13 +1,16 @@
 <div class="day">
   <div *ngIf="showDate && isCurrentDay" class="day-date-selected">
-    {{this.calendarData?.[0]?.date | date : 'dd' }}
+    {{ this.calendarData?.date | date : "dd" }}
   </div>
   <div *ngIf="showDate && !isCurrentDay" class="day-date-unselected">
-    {{this.calendarData?.[0]?.date | date : 'dd' }}
+    {{ this.calendarData?.date | date : "dd" }}
   </div>
   <div>
-    <div class="day-activity" *ngFor="let calendarData of calendarData">
-      <app-activity [calendarData]="calendarData!"></app-activity>
+    <div
+      class="day-activity"
+      *ngFor="let activity of this.calendarData?.activities"
+    >
+      <app-activity [activity]="activity"></app-activity>
     </div>
   </div>
 </div>

@@ -15,12 +15,14 @@ export class DayComponent implements OnInit {
   constructor() {}
   ngOnInit(): void {
     if (this.calendarData) {
-      this.activities = this.calendarData?.activities.sort((a, b) => {
-        return +new Date(a!.date) - +new Date(b!.date);
-      });
+      this.calendarData.activities = this.calendarData?.activities.sort(
+        (a, b) => {
+          return +new Date(a!.time!) - +new Date(b!.time!);
+        }
+      );
     }
     this.isCurrentDay =
       new Date().toISOString().split('T')[0] ===
-      new Date(this.calendarData?.[0]?.date!).toISOString().split('T')[0];
+      new Date(this.calendarData?.date!).toISOString().split('T')[0];
   }
 }

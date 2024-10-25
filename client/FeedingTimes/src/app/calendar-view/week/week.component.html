@@ -2,7 +2,7 @@
   <div *ngIf="showMonth" class="week-date">
     {{this.calendarData?.[0]?.date | date : 'M, MMMM' }}
   </div>
-  <div class="week-activity">
+  <div class="week-activity" *ngFor="let calendarData of this.calendarData">
     <app-day [calendarData]="this.calendarData"> </app-day>
   </div>
 </div>
