@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Activity } from 'src/services/Activity';
-import { ActivityTypes } from 'src/services/User';
 
 @Component({
   selector: 'app-activity',
@@ -8,7 +7,7 @@ import { ActivityTypes } from 'src/services/User';
   styleUrls: ['./activity.component.scss'],
 })
 export class ActivityComponent implements OnInit {
-  @Input() activity: ActivityTypes | undefined | null;
+  @Input() activity: Activity | undefined | null;
   showActivity: boolean = true;
   constructor() {}
 
