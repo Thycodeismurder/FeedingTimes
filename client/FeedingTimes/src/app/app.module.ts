@@ -25,7 +25,6 @@ import { DayComponent } from './calendar-view/day/day.component';
 import { WeekComponent } from './calendar-view/week/week.component';
 import { ActivityComponent } from './calendar-view/activity/activity.component';
 import { MatProgressSpinnerModule as MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { TransformEventDataPipe } from './pipes/transform-event-data.pipe';
 import { TransformIconsPipe } from './pipes/transform-icons.pipe';
 import { DatePickerComponent } from './shared/date-picker/date-picker.component';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
@@ -45,7 +44,6 @@ import { LoginComponent } from './login/login.component';
     DayComponent,
     WeekComponent,
     ActivityComponent,
-    TransformEventDataPipe,
     TransformIconsPipe,
     DatePickerComponent,
     DatePickerWeekDayRangeComponent,
