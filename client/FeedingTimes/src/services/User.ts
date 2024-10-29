@@ -1,3 +1,5 @@
+import { Activity } from './Activity';
+
 export type User = {
   UserUUID: string | null | undefined;
   Parents:
@@ -23,10 +25,16 @@ export type UserCache = {
 };
 
 export type CalendarData = {
+  activities: Activity[];
+  date: string;
+  userUUID: string;
+};
+export type DBCalendarData = {
   activities: ActivityTypes[];
   date: string;
   userUUID: string;
 };
+
 export type ActivityTypes = UserEvent | Feeding;
 
 export type UserEvent = {

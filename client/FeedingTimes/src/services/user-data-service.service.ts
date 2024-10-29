@@ -5,16 +5,13 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
-import { TransformEventDataPipe } from 'src/app/pipes/transform-event-data.pipe';
 import { filterCalendarDataByTime } from 'src/app/shared/functions/filterCalendarDataByTime';
-import {
-  createActivitiesOnEmptydays,
-  groupActivitiesByDay,
-} from 'src/app/shared/functions/groupActivitiesByTime';
-import { Activity, TimeFrame } from './Activity';
+import { TimeFrame } from './Activity';
+import { ActivityConversionService } from './activity-conversion.service';
 import {
   ActivityTypes,
   CalendarData,
+  DBCalendarData,
   loginAuthResponse,
   User,
   UserCache,
@@ -32,7 +29,7 @@ httpOptions.headers = httpOptions.headers.append('Content-Type', 'text/plain');
   providedIn: 'root',
 })
 export class UserDataServiceService {
-  transformEventData: TransformEventDataPipe;
+  ActivityConversionService: ActivityConversionService;
   private userSubject: BehaviorSubject<User | undefined> = new BehaviorSubject<
     User | undefined
   >(undefined);
@@ -46,7 +43,7 @@ export class UserDataServiceService {
     private httpClient: HttpClient,
     private userCacheService: UserCacheService
   ) {
-    this.transformEventData = new TransformEventDataPipe();
+    this.ActivityConversionService = new ActivityConversionService();
   }
 
   loginUser(userLogin: UserLogin): Observable<loginAuthResponse> {
@@ -147,15 +144,24 @@ export class UserDataServiceService {
         : console.log('no token');
     }
     const response = this.httpClient
-      .get<CalendarData[]>(apiEndPoint + 'feedingtimes/calendardata', {
+      .get<DBCalendarData[]>(apiEndPoint + 'feedingtimes/calendardata', {
         headers: httpOptions.headers,
       })
       .pipe(
         tap((data) => {
-          this.calendarData = data;
+          this.calendarData = data.map((calendarData) => {
+            const convertedCalendarData: CalendarData = {
+              activities: calendarData.activities.map((activity) =>
+                this.ActivityConversionService.convertToActivity(activity)
+              ),
+              date: calendarData.date,
+              userUUID: calendarData.userUUID,
+            };
+            return convertedCalendarData;
+          });
         })
       );
-    return response;
+    return response as unknown as Observable<CalendarData[]>;
   }
 
   filterCalendarData(date: Date[]): Promise<CalendarData[]> {
